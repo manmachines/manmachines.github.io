@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://manmachines.github.io/2019/11/05/htb%E4%B9%8BNetworked/</loc>
+    
+    <lastmod>2019-11-06T02:31:23.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://manmachines.github.io/2019/10/17/htb%E4%B9%8BShocker/</loc>
     
     <lastmod>2019-10-17T03:20:49.000Z</lastmod>
