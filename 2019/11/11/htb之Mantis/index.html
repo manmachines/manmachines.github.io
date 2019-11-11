@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>linux提权一条龙 | Hexo</title>
-  <meta name="keywords" content=" linux提权 , nc升级为完整shell ">
-  <meta name="description" content="linux提权一条龙 | Hexo">
+  <title>htb之Mantis | Hexo</title>
+  <meta name="keywords" content=" htb , 博客 ">
+  <meta name="description" content="htb之Mantis | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Mantisnmap 收集一下信息 可以看到1337和8080端口上运行着web服务目录爆破一下1337端口http://10.10.10.52:1337/secure_notes/上面显示着一个由base64编码组成的文件,打开可以看到一些有用的信息现在解码一下这个文件名不用测试都能看出来这是一个MS-SQL密码,直接连接吧  sqsh -U admin -S 10.10.10.52">
 <meta name="keywords" content="htb,博客">
@@ -282,9 +282,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-linux提权一条龙" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Mantis" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">linux提权一条龙</h1>
+        <h1 class="article-title">htb之Mantis</h1>
     
     <div class="article-meta">
         
@@ -292,23 +292,23 @@
         
         <span class="book">
             
-                <a href="javascript:" data-rel="转载文章">转载文章</a>
+                <a href="javascript:" data-rel="渗透笔记">渗透笔记</a>
             
         </span>
         
         
         <span class="tag">
             
-            <a href="javascript:" class="color3">linux提权</a>
+            <a href="javascript:" class="color4">htb</a>
             
-            <a href="javascript:" class="color3">nc升级为完整shell</a>
+            <a href="javascript:" class="color3">博客</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-15 17:37:10'>2019-10-15 17:28</time>
+        创建时间:<time class="date" title='更新时间: 2019-11-11 11:33:17'>2019-11-11 10:30</time>
         
     </div>
     <div class="article-meta">
@@ -330,7 +330,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Mantis"><span class="toc-text">htb之Mantis</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MS14-068"><span class="toc-text">MS14-068</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -346,7 +346,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>linux提权脚本大全：<a href="https://www.freebuf.com/sectool/121847.html" target="_blank" rel="noopener">https://www.freebuf.com/sectool/121847.html</a><br>nc提升为完整shell：<a href="https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html" target="_blank" rel="noopener">https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html</a><br>反向壳备忘录：<a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet" target="_blank" rel="noopener">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+        <h1 id="htb之Mantis"><a href="#htb之Mantis" class="headerlink" title="htb之Mantis"></a>htb之Mantis</h1><p>nmap 收集一下信息<br><img src="/images/a.png" alt></p>
+<p>可以看到1337和8080端口上运行着web服务<br>目录爆破一下1337端口<br><img src="/images/s.png" alt><br><a href="http://10.10.10.52:1337/secure_notes/" target="_blank" rel="noopener">http://10.10.10.52:1337/secure_notes/</a><br>上面显示着一个由base64编码组成的文件,打开可以看到一些有用的信息<br><img src="/images/d.png" alt><br><img src="/images/f.png" alt><br>现在解码一下这个文件名<br><img src="/images/g.png" alt><br>不用测试都能看出来这是一个MS-SQL密码,直接连接吧</p>
+<blockquote>
+<p>sqsh -U admin -S 10.10.10.52</p>
+</blockquote>
+<p>使用数据库命令枚举一下所需要的信息</p>
+<ol>
+<li>SELECT name FROM master.dbo.sysdatabases</li>
+<li>go</li>
+<li>SELECT * FROM orcharddb.INFORMATION_SCHEMA.TABLES</li>
+<li>go</li>
+<li>SELECT * FROM orcharddb.INFORMATION_SCHEMA.COLUMNS</li>
+<li>go</li>
+<li>USE orcharddb</li>
+<li>go</li>
+<li>SELECT * FROM blog_Orchard_Users_UserPartRecord</li>
+<li>go</li>
+</ol>
+<p>最后我们能获取到两个用户的账户密码</p>
+<blockquote>
+<p>admin:Password1234<br>James:J@m3s_P@ssW0rd!</p>
+</blockquote>
+<h2 id="MS14-068"><a href="#MS14-068" class="headerlink" title="MS14-068"></a>MS14-068</h2><p>该漏洞针对的是kerberos服务，并允许任何用户通过伪造kerberos票证将其普通用户的权限提升为域管理员。这是一个众所周知的漏洞利用，如果您具有较低的特权用户，则始终值得检查是否与过期的域控制器进行交互。</p>
+<p>exp:<a href="https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS14-068/pykek" target="_blank" rel="noopener">https://github.com/SecWiki/windows-kernel-exploits/tree/master/MS14-068/pykek</a></p>
+<p>通过漏洞利用，我们能直接获取到system权限</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -356,12 +380,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>linux提权一条龙</p>
+    <p><span class="copy-title">文章标题:</span>htb之Mantis</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-15, 17:28:17</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-15, 17:37:10</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/15/linux提权一条龙/" title="linux提权一条龙">https://manmachines.github.io/2019/10/15/linux提权一条龙/</a>
+    <p><span class="copy-title">发布时间:</span>2019-11-11, 10:30:22</p>
+    <p><span class="copy-title">最后更新:</span>2019-11-11, 11:33:17</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/11/htb之Mantis/" title="htb之Mantis">https://manmachines.github.io/2019/11/11/htb之Mantis/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>

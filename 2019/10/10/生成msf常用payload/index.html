@@ -6,23 +6,24 @@
   <meta name="keywords" content=" 博客 , 工具 ">
   <meta name="description" content="生成msf常用payload | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="htb之Networkednmap 一波 10.10.10.146开放着80端口和22端口 目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过GIF89a喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非">
-<meta name="keywords" content="博客,htb">
+<meta name="description" content="htb之Mantisnmap 收集一下信息 可以看到1337和8080端口上运行着web服务目录爆破一下1337端口http://10.10.10.52:1337/secure_notes/上面显示着一个由base64编码组成的文件,打开可以看到一些有用的信息现在解码一下这个文件名不用测试都能看出来这是一个MS-SQL密码,直接连接吧  sqsh -U admin -S 10.10.10.52">
+<meta name="keywords" content="htb,博客">
 <meta property="og:type" content="article">
-<meta property="og:title" content="htb之Networked">
-<meta property="og:url" content="https://manmachines.github.io/2019/11/05/htb之Networked/index.html">
+<meta property="og:title" content="htb之Mantis">
+<meta property="og:url" content="https://manmachines.github.io/2019/11/11/htb之Mantis/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="htb之Networkednmap 一波 10.10.10.146开放着80端口和22端口 目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过GIF89a喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非">
+<meta property="og:description" content="htb之Mantisnmap 收集一下信息 可以看到1337和8080端口上运行着web服务目录爆破一下1337端口http://10.10.10.52:1337/secure_notes/上面显示着一个由base64编码组成的文件,打开可以看到一些有用的信息现在解码一下这个文件名不用测试都能看出来这是一个MS-SQL密码,直接连接吧  sqsh -U admin -S 10.10.10.52">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://manmachines.github.io/images/q.png">
-<meta property="og:image" content="https://manmachines.github.io/images/w.png">
-<meta property="og:image" content="https://manmachines.github.io/images/e.png">
-<meta property="og:image" content="https://manmachines.github.io/2019/11/05/htb之Networked/i/mages/r.png">
-<meta property="og:updated_time" content="2019-11-06T02:42:34.000Z">
+<meta property="og:image" content="https://manmachines.github.io/images/a.png">
+<meta property="og:image" content="https://manmachines.github.io/images/s.png">
+<meta property="og:image" content="https://manmachines.github.io/images/d.png">
+<meta property="og:image" content="https://manmachines.github.io/images/f.png">
+<meta property="og:image" content="https://manmachines.github.io/images/g.png">
+<meta property="og:updated_time" content="2019-11-11T03:33:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="htb之Networked">
-<meta name="twitter:description" content="htb之Networkednmap 一波 10.10.10.146开放着80端口和22端口 目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过GIF89a喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非">
-<meta name="twitter:image" content="https://manmachines.github.io/images/q.png">
+<meta name="twitter:title" content="htb之Mantis">
+<meta name="twitter:description" content="htb之Mantisnmap 收集一下信息 可以看到1337和8080端口上运行着web服务目录爆破一下1337端口http://10.10.10.52:1337/secure_notes/上面显示着一个由base64编码组成的文件,打开可以看到一些有用的信息现在解码一下这个文件名不用测试都能看出来这是一个MS-SQL密码,直接连接吧  sqsh -U admin -S 10.10.10.52">
+<meta name="twitter:image" content="https://manmachines.github.io/images/a.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -95,11 +96,11 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(8)</small></div></li>
+    <li><div class="all active">全部文章<small>(9)</small></div></li>
     
         
             
-            <li><div data-rel="渗透笔记">渗透笔记<small>(5)</small></div>
+            <li><div data-rel="渗透笔记">渗透笔记<small>(6)</small></div>
                 
             </li>
             
@@ -131,7 +132,7 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="8">
+<input type="hidden" id="yelog_site_posts_number" value="9">
 
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
@@ -168,11 +169,11 @@
     <div class="tags-list">
     
     <li class="article-tag-list-item">
-        <a href="javascript:" class="color3">博客</a>
+        <a href="javascript:" class="color4">htb</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a href="javascript:" class="color4">htb</a>
+        <a href="javascript:" class="color3">博客</a>
     </li>
     
     <li class="article-tag-list-item">
@@ -198,8 +199,24 @@
     <nav id="title-list-nav">
         
         <a  class="渗透笔记 "
+           href="/2019/11/11/htb之Mantis/"
+           data-tag="htb,博客"
+           data-author="" >
+            <span class="post-title" title="htb之Mantis">htb之Mantis</span>
+            <span class="post-date" title="2019-11-11 10:30:22">2019/11/11</span>
+        </a>
+        
+        <a  class="渗透笔记 "
+           href="/2019/11/05/htb之Networked/"
+           data-tag="htb,博客"
+           data-author="" >
+            <span class="post-title" title="htb之Networked">htb之Networked</span>
+            <span class="post-date" title="2019-11-05 15:10:35">2019/11/05</span>
+        </a>
+        
+        <a  class="渗透笔记 "
            href="/2019/10/09/htb之Arctic/"
-           data-tag="博客,htb"
+           data-tag="htb,博客"
            data-author="" >
             <span class="post-title" title="htb之Arctic">htb之Arctic</span>
             <span class="post-date" title="2019-10-09 11:04:11">2019/10/09</span>
@@ -207,7 +224,7 @@
         
         <a  class="渗透笔记 "
            href="/2019/10/11/htb之Cronos/"
-           data-tag="博客,htb"
+           data-tag="htb,博客"
            data-author="" >
             <span class="post-title" title="htb之Cronos">htb之Cronos</span>
             <span class="post-date" title="2019-10-11 09:40:43">2019/10/11</span>
@@ -215,23 +232,15 @@
         
         <a  class="渗透笔记 "
            href="/2019/10/16/htb之Grandpa/"
-           data-tag="博客,htb"
+           data-tag="htb,博客"
            data-author="" >
             <span class="post-title" title="htb之Grandpa与Granny">htb之Grandpa与Granny</span>
             <span class="post-date" title="2019-10-16 09:27:50">2019/10/16</span>
         </a>
         
         <a  class="渗透笔记 "
-           href="/2019/11/05/htb之Networked/"
-           data-tag="博客,htb"
-           data-author="" >
-            <span class="post-title" title="htb之Networked">htb之Networked</span>
-            <span class="post-date" title="2019-11-05 15:10:35">2019/11/05</span>
-        </a>
-        
-        <a  class="渗透笔记 "
            href="/2019/10/17/htb之Shocker/"
-           data-tag="博客,htb"
+           data-tag="htb,博客"
            data-author="" >
             <span class="post-title" title="htb之Shocker">htb之Shocker</span>
             <span class="post-date" title="2019-10-17 10:42:21">2019/10/17</span>
@@ -486,7 +495,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#博客','#htb','#linux提权','#nc升级为完整shell','#安全事件','#工具',],
+            'data': ['#htb','#博客','#linux提权','#nc升级为完整shell','#安全事件','#工具',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
