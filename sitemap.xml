@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://manmachines.github.io/2019/11/21/htb%E4%B9%8BNibbles/</loc>
+    
+    <lastmod>2019-11-21T07:39:18.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://manmachines.github.io/2019/11/20/htb%E4%B9%8Bjerry/</loc>
     
     <lastmod>2019-11-20T08:11:00.000Z</lastmod>

