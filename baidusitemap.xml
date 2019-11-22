@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://manmachines.github.io/2019/11/22/htb%E4%B9%8BHaystack/</loc>
+    <lastmod>2019-11-22</lastmod>
+  </url>  <url>
+    <loc>https://manmachines.github.io/2019/11/22/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%94%BB%E7%95%A5/</loc>
+    <lastmod>2019-11-22</lastmod>
+  </url>  <url>
     <loc>https://manmachines.github.io/2019/11/21/htb%E4%B9%8BNibbles/</loc>
     <lastmod>2019-11-21</lastmod>
   </url>  <url>
