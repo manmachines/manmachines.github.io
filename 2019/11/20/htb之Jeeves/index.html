@@ -6,29 +6,23 @@
   <meta name="keywords" content=" htb , 博客 ">
   <meta name="description" content="htb之Jeeves | 个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="工具地址:https://github.com/worawit/MS17-010 管道探测我们接下来以一台目标为例，对目标进行poc探测： python2 checker.py 192.168.154.138 该工具利用基础为管道开放，意味着接下来的exp工作可否顺利开展。 程序执行接下来对木马做好免杀工作，可以说CS或者其他成熟木马，本处演示方便采用了msf生成的木马：  msfvenom -p">
-<meta name="keywords" content="博客,渗透思路">
+<meta name="description" content="CVE-2021-1675 Windows Print Spooler远程代码执行漏洞复现##漏洞环境搭建：Windows Server 2019 (192.168.72.140)kali (192.168.72.129)exp：https://github.com/cube0x0/CVE-2021-1675#smb-configuration kali的环境：要重新安装impacketgit c">
+<meta name="keywords" content="博客">
 <meta property="og:type" content="article">
-<meta property="og:title" content="内网渗透攻略">
-<meta property="og:url" content="https://manmachines.github.io/2019/11/22/内网渗透攻略/index.html">
+<meta property="og:title" content="CVE-2021-1675复现">
+<meta property="og:url" content="https://manmachines.github.io/2021/07/06/CVE-2021-1675复现/index.html">
 <meta property="og:site_name" content="个人博客">
-<meta property="og:description" content="工具地址:https://github.com/worawit/MS17-010 管道探测我们接下来以一台目标为例，对目标进行poc探测： python2 checker.py 192.168.154.138 该工具利用基础为管道开放，意味着接下来的exp工作可否顺利开展。 程序执行接下来对木马做好免杀工作，可以说CS或者其他成熟木马，本处演示方便采用了msf生成的木马：  msfvenom -p">
+<meta property="og:description" content="CVE-2021-1675 Windows Print Spooler远程代码执行漏洞复现##漏洞环境搭建：Windows Server 2019 (192.168.72.140)kali (192.168.72.129)exp：https://github.com/cube0x0/CVE-2021-1675#smb-configuration kali的环境：要重新安装impacketgit c">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/1.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/2.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/3.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/4.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/5.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/6.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/7.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/8.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/10.png">
-<meta property="og:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/11.png">
-<meta property="og:updated_time" content="2019-11-22T06:28:28.000Z">
+<meta property="og:image" content="https://manmachines.github.io/images/CVE-2021-1675%E5%A4%8D%E7%8E%B0/1.png">
+<meta property="og:image" content="https://manmachines.github.io/images/CVE-2021-1675%E5%A4%8D%E7%8E%B0/2.png">
+<meta property="og:image" content="https://manmachines.github.io/images/CVE-2021-1675%E5%A4%8D%E7%8E%B0/3.png">
+<meta property="og:image" content="https://manmachines.github.io/images/CVE-2021-1675%E5%A4%8D%E7%8E%B0/4.png">
+<meta property="og:updated_time" content="2021-07-07T02:49:57.525Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="内网渗透攻略">
-<meta name="twitter:description" content="工具地址:https://github.com/worawit/MS17-010 管道探测我们接下来以一台目标为例，对目标进行poc探测： python2 checker.py 192.168.154.138 该工具利用基础为管道开放，意味着接下来的exp工作可否顺利开展。 程序执行接下来对木马做好免杀工作，可以说CS或者其他成熟木马，本处演示方便采用了msf生成的木马：  msfvenom -p">
-<meta name="twitter:image" content="https://manmachines.github.io/images/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/1.png">
+<meta name="twitter:title" content="CVE-2021-1675复现">
+<meta name="twitter:description" content="CVE-2021-1675 Windows Print Spooler远程代码执行漏洞复现##漏洞环境搭建：Windows Server 2019 (192.168.72.140)kali (192.168.72.129)exp：https://github.com/cube0x0/CVE-2021-1675#smb-configuration kali的环境：要重新安装impacketgit c">
+<meta name="twitter:image" content="https://manmachines.github.io/images/CVE-2021-1675%E5%A4%8D%E7%8E%B0/1.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -113,7 +107,7 @@
     
         
             
-            <li><div data-rel="转载文章">转载文章<small>(3)</small></div>
+            <li><div data-rel="安全通报">安全通报<small>(1)</small></div>
                 
             </li>
             
@@ -121,7 +115,7 @@
     
         
             
-            <li><div data-rel="安全通报">安全通报<small>(1)</small></div>
+            <li><div data-rel="转载文章">转载文章<small>(3)</small></div>
                 
             </li>
             
@@ -182,6 +176,10 @@
     </li>
     
     <li class="article-tag-list-item">
+        <a href="javascript:" class="color5">安全事件</a>
+    </li>
+    
+    <li class="article-tag-list-item">
         <a href="javascript:" class="color3">linux提权</a>
     </li>
     
@@ -190,15 +188,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a href="javascript:" class="color5">安全事件</a>
+        <a href="javascript:" class="color3">工具</a>
     </li>
     
     <li class="article-tag-list-item">
         <a href="javascript:" class="color5">渗透思路</a>
-    </li>
-    
-    <li class="article-tag-list-item">
-        <a href="javascript:" class="color3">工具</a>
     </li>
     
     <div class="clearfix"></div>
@@ -216,6 +210,14 @@
         </a>
         
         <a  class="渗透笔记 "
+           href="/2021/07/06/CVE-2021-1675复现/"
+           data-tag="博客"
+           data-author="" >
+            <span class="post-title" title="CVE-2021-1675复现">CVE-2021-1675复现</span>
+            <span class="post-date" title="2021-07-06 17:31:15">2021/07/06</span>
+        </a>
+        
+        <a  class="渗透笔记 "
            href="/2019/10/09/htb之Arctic/"
            data-tag="htb,博客"
            data-author="" >
@@ -224,19 +226,19 @@
         </a>
         
         <a  class="渗透笔记 "
+           href="/2019/11/11/htb之Lazy/"
+           data-tag="htb,博客"
+           data-author="" >
+            <span class="post-title" title="htb之Lazy">htb之Lazy</span>
+            <span class="post-date" title="2019-11-11 17:17:42">2019/11/11</span>
+        </a>
+        
+        <a  class="渗透笔记 "
            href="/2019/11/22/htb之Haystack/"
            data-tag="htb,博客"
            data-author="" >
             <span class="post-title" title="htb之Haystack">htb之Haystack</span>
             <span class="post-date" title="2019-11-22 09:55:06">2019/11/22</span>
-        </a>
-        
-        <a  class="渗透笔记 "
-           href="/2021/07/06/CVE-2021-1675复现/"
-           data-tag="博客"
-           data-author="" >
-            <span class="post-title" title="CVE-2021-1675复现">CVE-2021-1675复现</span>
-            <span class="post-date" title="2021-07-06 17:31:15">2021/07/06</span>
         </a>
         
         <a  class="渗透笔记 "
@@ -256,6 +258,14 @@
         </a>
         
         <a  class="渗透笔记 "
+           href="/2019/11/11/htb之Mantis/"
+           data-tag="htb,博客"
+           data-author="" >
+            <span class="post-title" title="htb之Mantis">htb之Mantis</span>
+            <span class="post-date" title="2019-11-11 10:30:22">2019/11/11</span>
+        </a>
+        
+        <a  class="渗透笔记 "
            href="/2019/11/05/htb之Networked/"
            data-tag="htb,博客"
            data-author="" >
@@ -264,11 +274,11 @@
         </a>
         
         <a  class="渗透笔记 "
-           href="/2019/11/21/htb之Nibbles/"
+           href="/2019/11/14/htb之bank/"
            data-tag="htb,博客"
            data-author="" >
-            <span class="post-title" title="htb之Nibbles">htb之Nibbles</span>
-            <span class="post-date" title="2019-11-21 15:08:45">2019/11/21</span>
+            <span class="post-title" title="htb之bank">htb之bank</span>
+            <span class="post-date" title="2019-11-14 14:39:45">2019/11/14</span>
         </a>
         
         <a  class="渗透笔记 "
@@ -280,27 +290,11 @@
         </a>
         
         <a  class="渗透笔记 "
-           href="/2019/11/11/htb之Mantis/"
+           href="/2019/11/21/htb之Nibbles/"
            data-tag="htb,博客"
            data-author="" >
-            <span class="post-title" title="htb之Mantis">htb之Mantis</span>
-            <span class="post-date" title="2019-11-11 10:30:22">2019/11/11</span>
-        </a>
-        
-        <a  class="渗透笔记 "
-           href="/2019/11/11/htb之Lazy/"
-           data-tag="htb,博客"
-           data-author="" >
-            <span class="post-title" title="htb之Lazy">htb之Lazy</span>
-            <span class="post-date" title="2019-11-11 17:17:42">2019/11/11</span>
-        </a>
-        
-        <a  class="转载文章 "
-           href="/2019/10/15/linux提权一条龙/"
-           data-tag="linux提权,nc升级为完整shell"
-           data-author="" >
-            <span class="post-title" title="linux提权一条龙">linux提权一条龙</span>
-            <span class="post-date" title="2019-10-15 17:28:17">2019/10/15</span>
+            <span class="post-title" title="htb之Nibbles">htb之Nibbles</span>
+            <span class="post-date" title="2019-11-21 15:08:45">2019/11/21</span>
         </a>
         
         <a  class="渗透笔记 "
@@ -319,14 +313,6 @@
             <span class="post-date" title="2019-11-20 15:36:04">2019/11/20</span>
         </a>
         
-        <a  class="渗透笔记 "
-           href="/2019/11/14/htb之bank/"
-           data-tag="htb,博客"
-           data-author="" >
-            <span class="post-title" title="htb之bank">htb之bank</span>
-            <span class="post-date" title="2019-11-14 14:39:45">2019/11/14</span>
-        </a>
-        
         <a  class="安全通报 "
            href="/2019/10/09/关于QEMU-KVM虚拟机存在内核逃逸漏洞的预警通知/"
            data-tag="博客,安全事件"
@@ -336,11 +322,11 @@
         </a>
         
         <a  class="转载文章 "
-           href="/2019/11/22/内网渗透攻略/"
-           data-tag="博客,渗透思路"
+           href="/2019/10/15/linux提权一条龙/"
+           data-tag="linux提权,nc升级为完整shell"
            data-author="" >
-            <span class="post-title" title="内网渗透攻略">内网渗透攻略</span>
-            <span class="post-date" title="2019-11-22 14:13:16">2019/11/22</span>
+            <span class="post-title" title="linux提权一条龙">linux提权一条龙</span>
+            <span class="post-date" title="2019-10-15 17:28:17">2019/10/15</span>
         </a>
         
         <a  class="转载文章 "
@@ -349,6 +335,14 @@
            data-author="" >
             <span class="post-title" title="生成msf常用payload">生成msf常用payload</span>
             <span class="post-date" title="2019-10-10 16:35:19">2019/10/10</span>
+        </a>
+        
+        <a  class="转载文章 "
+           href="/2019/11/22/内网渗透攻略/"
+           data-tag="博客,渗透思路"
+           data-author="" >
+            <span class="post-title" title="内网渗透攻略">内网渗透攻略</span>
+            <span class="post-date" title="2019-11-22 14:13:16">2019/11/22</span>
         </a>
         
     </nav>
@@ -527,7 +521,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#htb','#博客','#linux提权','#nc升级为完整shell','#安全事件','#渗透思路','#工具',],
+            'data': ['#htb','#博客','#安全事件','#linux提权','#nc升级为完整shell','#工具','#渗透思路',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
