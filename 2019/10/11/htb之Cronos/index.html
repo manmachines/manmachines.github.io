@@ -6,24 +6,22 @@
   <meta name="keywords" content=" 博客 , htb ">
   <meta name="description" content="htb之Cronos | 个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="CVE-2017-10271漏洞描述：Weblogic的WLS Security组件对外提供webservice服务，其中使用了XMLDecoder来解析用户传入的XML数据，在解析的过程中出现反序列化漏洞，导致可执行任意命令。攻击者发送精心构造的xml数据甚至能通过反弹shell拿到权限。 漏洞影响版本：WebLogic 10.3.6.0.0WebLogic 12.1.3.0.0WebLogic">
+<meta name="description" content="CVE-2021-29505漏洞描述：XStream在解析XML文本时使用黑名单机制来防御反序列化漏洞，但是其 1.4.16及之前版本黑名单存在缺陷。攻击者可以操纵已处理的输入流并替换或注入对象，从而在服务器上执行本地命令。 影响版本：XStream &amp;lt;= 1.4.16 poc：POST / HTTP/1.1 Host: 192.168.80.129:8080 Accept-Encoding">
 <meta name="keywords" content="博客">
 <meta property="og:type" content="article">
-<meta property="og:title" content="weblogic热门漏洞复现">
-<meta property="og:url" content="https://manmachines.github.io/2021/11/16/weblogic热门漏洞复现/index.html">
+<meta property="og:title" content="cve-2021-29505复现过程">
+<meta property="og:url" content="https://manmachines.github.io/2021/11/17/cve-2021-29505复现过程/index.html">
 <meta property="og:site_name" content="个人博客">
-<meta property="og:description" content="CVE-2017-10271漏洞描述：Weblogic的WLS Security组件对外提供webservice服务，其中使用了XMLDecoder来解析用户传入的XML数据，在解析的过程中出现反序列化漏洞，导致可执行任意命令。攻击者发送精心构造的xml数据甚至能通过反弹shell拿到权限。 漏洞影响版本：WebLogic 10.3.6.0.0WebLogic 12.1.3.0.0WebLogic">
+<meta property="og:description" content="CVE-2021-29505漏洞描述：XStream在解析XML文本时使用黑名单机制来防御反序列化漏洞，但是其 1.4.16及之前版本黑名单存在缺陷。攻击者可以操纵已处理的输入流并替换或注入对象，从而在服务器上执行本地命令。 影响版本：XStream &amp;lt;= 1.4.16 poc：POST / HTTP/1.1 Host: 192.168.80.129:8080 Accept-Encoding">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://manmachines.github.io/images/weblogic/1.png">
-<meta property="og:image" content="https://manmachines.github.io/images/weblogic/2.png">
-<meta property="og:image" content="https://manmachines.github.io/images/weblogic/3.png">
-<meta property="og:image" content="https://manmachines.github.io/images/weblogic/4.png">
-<meta property="og:image" content="https://manmachines.github.io/images/weblogic/5.png">
-<meta property="og:updated_time" content="2021-11-16T02:56:39.250Z">
+<meta property="og:image" content="https://manmachines.github.io/images/cve-2021-29505/1.png">
+<meta property="og:image" content="https://manmachines.github.io/images/cve-2021-29505/2.png">
+<meta property="og:image" content="https://manmachines.github.io/images/cve-2021-29505/3.png">
+<meta property="og:updated_time" content="2021-11-17T02:58:33.887Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="weblogic热门漏洞复现">
-<meta name="twitter:description" content="CVE-2017-10271漏洞描述：Weblogic的WLS Security组件对外提供webservice服务，其中使用了XMLDecoder来解析用户传入的XML数据，在解析的过程中出现反序列化漏洞，导致可执行任意命令。攻击者发送精心构造的xml数据甚至能通过反弹shell拿到权限。 漏洞影响版本：WebLogic 10.3.6.0.0WebLogic 12.1.3.0.0WebLogic">
-<meta name="twitter:image" content="https://manmachines.github.io/images/weblogic/1.png">
+<meta name="twitter:title" content="cve-2021-29505复现过程">
+<meta name="twitter:description" content="CVE-2021-29505漏洞描述：XStream在解析XML文本时使用黑名单机制来防御反序列化漏洞，但是其 1.4.16及之前版本黑名单存在缺陷。攻击者可以操纵已处理的输入流并替换或注入对象，从而在服务器上执行本地命令。 影响版本：XStream &amp;lt;= 1.4.16 poc：POST / HTTP/1.1 Host: 192.168.80.129:8080 Accept-Encoding">
+<meta name="twitter:image" content="https://manmachines.github.io/images/cve-2021-29505/1.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -189,11 +187,11 @@
     </li>
     
     <li class="article-tag-list-item">
-        <a href="javascript:" class="color3">工具</a>
+        <a href="javascript:" class="color5">渗透思路</a>
     </li>
     
     <li class="article-tag-list-item">
-        <a href="javascript:" class="color5">渗透思路</a>
+        <a href="javascript:" class="color3">工具</a>
     </li>
     
     <div class="clearfix"></div>
@@ -554,7 +552,7 @@
     /*作者、标签的自动补全*/
     $(function () {
         $('.search').AutoComplete({
-            'data': ['#博客','#htb','#linux提权','#nc升级为完整shell','#安全事件','#工具','#渗透思路',],
+            'data': ['#博客','#htb','#linux提权','#nc升级为完整shell','#安全事件','#渗透思路','#工具',],
             'itemHeight': 20,
             'width': 418
         }).AutoComplete('show');
