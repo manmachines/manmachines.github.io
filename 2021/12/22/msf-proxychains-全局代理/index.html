@@ -2,9 +2,9 @@
 <html>
 <head><meta name="generator" content="Hexo 3.9.0">
   <meta charset="utf-8">
-  <title>linux提权脚本 | 个人博客</title>
-  <meta name="keywords" content=" linux提权 , nc升级为完整shell ">
-  <meta name="description" content="linux提权脚本 | 个人博客">
+  <title>msf或cs+proxychains=全局代理 | 个人博客</title>
+  <meta name="keywords" content=" 博客 ">
+  <meta name="description" content="msf或cs+proxychains=全局代理 | 个人博客">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="CVE-2021-29505漏洞描述：XStream在解析XML文本时使用黑名单机制来防御反序列化漏洞，但是其 1.4.16及之前版本黑名单存在缺陷。攻击者可以操纵已处理的输入流并替换或注入对象，从而在服务器上执行本地命令。 影响版本：XStream &amp;lt;= 1.4.16 poc：POST / HTTP/1.1 Host: 192.168.80.129:8080 Accept-Encoding">
 <meta name="keywords" content="博客">
@@ -388,9 +388,9 @@
 </aside>
 <div class="post">
     <div class="pjax">
-        <article id="post-linux提权脚本" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-msf-proxychains-全局代理" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">linux提权脚本</h1>
+        <h1 class="article-title">msf或cs+proxychains=全局代理</h1>
     
     <div class="article-meta">
         
@@ -398,23 +398,21 @@
         
         <span class="book">
             
-                <a href="javascript:" data-rel="转载文章">转载文章</a>
+                <a href="javascript:" data-rel="渗透笔记">渗透笔记</a>
             
         </span>
         
         
         <span class="tag">
             
-            <a href="javascript:" class="color3">linux提权</a>
-            
-            <a href="javascript:" class="color3">nc升级为完整shell</a>
+            <a href="javascript:" class="color3">博客</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-        创建时间:<time class="date" title='更新时间: 2021-11-16 10:29:29'>2019-10-15 17:28</time>
+        创建时间:<time class="date" title='更新时间: 2021-12-22 17:36:54'>2021-12-22 16:39</time>
         
     </div>
     <div class="article-meta">
@@ -447,7 +445,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#msf或cs-proxychains-全局代理"><span class="toc-text">msf或cs+proxychains=全局代理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#msf-proxychains篇"><span class="toc-text">msf+proxychains篇</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cs-proxychains篇"><span class="toc-text">cs+proxychains篇</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -463,7 +461,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>linux提权脚本大全：<a href="https://www.freebuf.com/sectool/121847.html" target="_blank" rel="noopener">https://www.freebuf.com/sectool/121847.html</a><br>nc提升为完整shell：<a href="https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html" target="_blank" rel="noopener">https://wx.abbao.cn/a/13847-7cd1b6e418fa413b.html</a><br>反向壳备忘录：<a href="http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet" target="_blank" rel="noopener">http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+        <h1 id="msf或cs-proxychains-全局代理"><a href="#msf或cs-proxychains-全局代理" class="headerlink" title="msf或cs+proxychains=全局代理"></a>msf或cs+proxychains=全局代理</h1><h2 id="msf-proxychains篇"><a href="#msf-proxychains篇" class="headerlink" title="msf+proxychains篇"></a>msf+proxychains篇</h2><p>在获取到msf shell之后<br>run post/multi/manage/autoroute 添加全局路由<br>或run autoroute -s xx.xx.0.0/24 添加单条路由<br><img src="/images/msf%E6%88%96cs+proxychains=%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/1.jpg" alt></p>
+<p>route print 查看你所添加的路由<br><img src="/images/msf%E6%88%96cs+proxychains=%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/2.jpg" alt></p>
+<p>之后设置代理模式IP等：<br>use auxiliary/server/socks_proxy<br>注意这里的IP设置你kali机的IP，由kali机转发出来<br>设置完成之后run一下，会在后台运行<br><img src="/images/msf%E6%88%96cs+proxychains=%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/3.jpg" alt></p>
+<p>这里msf的代理转发算是完成了<br>设置proxychains以目标机访问内网<br>vim /etc/proxychains.conf<br><img src="/images/msf%E6%88%96cs+proxychains=%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/4.jpg" alt></p>
+<p>现在执行任意命令前+proxychains工具即可<br>如访问内网服务器的web服务<br>proxychains firefox<br><img src="/images/msf%E6%88%96cs+proxychains=%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/6.jpg" alt><br>从终端这可以看出我们是以127.0.0.1:7890 访问到 <a href="http://192.168.52.20:8000/" target="_blank" rel="noopener">http://192.168.52.20:8000/</a></p>
+<h2 id="cs-proxychains篇"><a href="#cs-proxychains篇" class="headerlink" title="cs+proxychains篇"></a>cs+proxychains篇</h2><p>cs配置全局代理就比较简单<br>这里直接启动socks代理或者cs交互台输入socks 端口号<br><img src="/images/msf%E6%88%96cs+proxychains=%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/5.jpg" alt></p>
+<p>设置proxychains以目标机访问内网<br>vim /etc/proxychains.conf<br>注意cs只能设置socks4a代理<br><img src="/images/msf%E6%88%96cs+proxychains=%E5%85%A8%E5%B1%80%E4%BB%A3%E7%90%86/7.jpg" alt><br>至此设置完成</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 aqdmin@qq.com </span>
@@ -473,12 +477,12 @@
 
 
 <div class="article_copyright">
-    <p><span class="copy-title">文章标题:</span>linux提权脚本</p>
+    <p><span class="copy-title">文章标题:</span>msf或cs+proxychains=全局代理</p>
     
     <p><span class="copy-title">本文作者:</span><a href="javascript:void(0)" title="小菜同学">小菜同学</a></p>
-    <p><span class="copy-title">发布时间:</span>2019-10-15, 17:28:17</p>
-    <p><span class="copy-title">最后更新:</span>2021-11-16, 10:29:29</p>
-    <span class="copy-title">原始链接:</span><a class="post-url" href="/2019/10/15/linux提权脚本/" title="linux提权脚本">https://manmachines.github.io/2019/10/15/linux提权脚本/</a>
+    <p><span class="copy-title">发布时间:</span>2021-12-22, 16:39:55</p>
+    <p><span class="copy-title">最后更新:</span>2021-12-22, 17:36:54</p>
+    <span class="copy-title">原始链接:</span><a class="post-url" href="/2021/12/22/msf-proxychains-全局代理/" title="msf或cs+proxychains=全局代理">https://manmachines.github.io/2021/12/22/msf-proxychains-全局代理/</a>
     <p>
         <span class="copy-title">版权声明:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
     </p>
